@@ -1,4 +1,4 @@
-package com.alokomkar.rxmoviedb;
+package com.alokomkar.rxmoviedb.utils;
 
 import android.content.Context;
 import android.graphics.Rect;

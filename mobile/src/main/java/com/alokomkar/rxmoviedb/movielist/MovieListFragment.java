@@ -1,6 +1,10 @@
 package com.alokomkar.rxmoviedb.movielist;
 
+
 import android.os.Build;
+
+import android.content.Context;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -18,11 +22,15 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.alokomkar.rxmoviedb.GravitySnapHelper;
-import com.alokomkar.rxmoviedb.ItemOffsetDecoration;
 import com.alokomkar.rxmoviedb.MovieApplication;
+import com.alokomkar.rxmoviedb.NavigationListener;
 import com.alokomkar.rxmoviedb.R;
+
 import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLayout;
+
+import com.alokomkar.rxmoviedb.utils.GravitySnapHelper;
+import com.alokomkar.rxmoviedb.utils.ItemOffsetDecoration;
+
 
 import java.util.List;
 
@@ -59,8 +67,10 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     NestedScrollView rootContainer;
     private MovieListPresenter movieListPresenter;
     private Scene movieDetailsScene;
-    private List<Movie> movieList;
+    private List<Movie> movieListCopy;
     private float offset;
+
+    private NavigationListener navigationListener;
 
 
     @Nullable
@@ -81,27 +91,30 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
 
     @Override
     public void loadTopRatedMovies(List<Movie> movieList) {
-        movieList=movieList;
+        movieListCopy=movieList;
         setupRecyclerView(topMoviesRecyclerView, movieList);
     }
 
 
     @Override
     public void loadPopularMovies(List<Movie> movieList) {
-        movieList=movieList;
+        movieListCopy=movieList;
         setupRecyclerView(popularMoviesRecyclerView, movieList);
     }
 
     @Override
     public void loadLatestMovies(List<Movie> movieList) {
-        movieList=movieList;
+        movieListCopy=movieList;
         setupRecyclerView(latestMoviesRecyclerView, movieList);
     }
 
     @Override
     public void loadNowPlayingMovies(List<Movie> movieList) {
-        movieList=movieList;
-        setupRecyclerView(nowPlayingRecyclerView, movieList);
+
+        movieListCopy=movieList;
+        setupRecyclerView( nowPlayingRecyclerView, movieList );
+        navigationListener.onMoviesLoaded( movieList );
+
     }
 
     @Override
@@ -129,7 +142,7 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     @Override
     public void onItemClick(View itemClicked, String transitionName, int position) {
         offset=rootContainer.getScaleY();
-        movieDetailsScene= MovieDetailsLayout.showScene(getActivity(),rootContainer,itemClicked,transitionName,movieList.get(position).getId());
+        movieDetailsScene= MovieDetailsLayout.showScene(getActivity(),rootContainer,itemClicked,transitionName,movieListCopy.get(position).getId());
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, List<Movie> movieList) {
@@ -144,5 +157,19 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
         snapHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(movieListRecyclerAdapter);
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if( context instanceof NavigationListener ) {
+            navigationListener = (NavigationListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        navigationListener = null;
+        super.onDetach();
     }
 }

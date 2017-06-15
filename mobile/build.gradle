@@ -30,6 +30,7 @@ android {
 }
 
 dependencies {
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
     //Networking
     compile("com.squareup.retrofit2:adapter-rxjava2:2.2.0") {
         exclude group: 'com.squareup.retrofit2', module: 'retrofit'

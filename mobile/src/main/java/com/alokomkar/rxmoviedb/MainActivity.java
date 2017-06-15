@@ -1,5 +1,6 @@
 package com.alokomkar.rxmoviedb;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -13,12 +14,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.alokomkar.rxmoviedb.movielist.Movie;
 import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
+import com.alokomkar.rxmoviedb.trailers.TrailerFragment;
+import com.alokomkar.rxmoviedb.trailers.TrailerViewPagerAdapter;
+import com.alokomkar.rxmoviedb.utils.DepthPageTransformer;
+import com.alokomkar.rxmoviedb.youtube.FragmentDemoActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationListener {
 
     @BindView(R.id.movieTrailerViewPager)
     ViewPager movieTrailerViewPager;
@@ -83,5 +92,23 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onMoviesLoaded(List<Movie> movies) {
+        movieTrailerViewPager.setPageTransformer(true, new DepthPageTransformer());
+        List<TrailerFragment> trailerFragments = new ArrayList<>();
+        for( Movie movie : movies ) {
+            TrailerFragment trailerFragment = new TrailerFragment();
+            trailerFragment.setMovie(movie);
+            trailerFragments.add(trailerFragment);
+        }
+        movieTrailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), trailerFragments));
+    }
+
+    @Override
+    public void playVideo(Movie movie) {
+        Intent intent = new Intent(MainActivity.this, FragmentDemoActivity.class);
+        startActivity(intent);
     }
 }
