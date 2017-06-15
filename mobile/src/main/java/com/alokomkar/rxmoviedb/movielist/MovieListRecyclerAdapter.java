@@ -30,15 +30,17 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
     private Context context;
     private List<Movie> movieList;
     private ItemClickListener itemClickListener;
+    private RecyclerView recyclerView;
 
 
     public interface ItemClickListener {
-        void onItemClick(View sharedView, String transitionName, final int position);
+        void onItemClick(RecyclerView recyclerView, View sharedView, String transitionName, final int position, Movie movie);
     }
 
-    public MovieListRecyclerAdapter(Context context, List<Movie> movieList, ItemClickListener itemClickListener) {
+    public MovieListRecyclerAdapter(RecyclerView recyclerView, Context context, List<Movie> movieList, ItemClickListener itemClickListener) {
         this.context = context;
         this.movieList = movieList;
+        this.recyclerView = recyclerView;
         this.itemClickListener = itemClickListener;
     }
 
@@ -90,7 +92,12 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
         public void onClick(View view) {
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                itemClickListener.onItemClick(view,TransitionUtils.getRecyclerViewTransitionName(position),position);
+                itemClickListener.onItemClick(
+                        recyclerView,
+                        view,
+                        TransitionUtils.getRecyclerViewTransitionName(position),
+                        position,
+                        movieList.get(position));
             }
         }
     }

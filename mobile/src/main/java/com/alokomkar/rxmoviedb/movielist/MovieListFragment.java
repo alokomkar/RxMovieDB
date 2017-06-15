@@ -67,7 +67,6 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     NestedScrollView rootContainer;
     private MovieListPresenter movieListPresenter;
     private Scene movieDetailsScene;
-    private List<Movie> movieListCopy;
     private float offset;
 
     private NavigationListener navigationListener;
@@ -91,27 +90,23 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
 
     @Override
     public void loadTopRatedMovies(List<Movie> movieList) {
-        movieListCopy=movieList;
         setupRecyclerView(topMoviesRecyclerView, movieList);
     }
 
 
     @Override
     public void loadPopularMovies(List<Movie> movieList) {
-        movieListCopy=movieList;
         setupRecyclerView(popularMoviesRecyclerView, movieList);
     }
 
     @Override
     public void loadLatestMovies(List<Movie> movieList) {
-        movieListCopy=movieList;
         setupRecyclerView(latestMoviesRecyclerView, movieList);
     }
 
     @Override
     public void loadNowPlayingMovies(List<Movie> movieList) {
 
-        movieListCopy=movieList;
         setupRecyclerView( nowPlayingRecyclerView, movieList );
         navigationListener.onMoviesLoaded( movieList );
 
@@ -140,14 +135,14 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
 
 
     @Override
-    public void onItemClick(View itemClicked, String transitionName, int position) {
+    public void onItemClick(RecyclerView recyclerView, View itemClicked, String transitionName, int position, Movie movie) {
         offset=rootContainer.getScaleY();
-        movieDetailsScene= MovieDetailsLayout.showScene(getActivity(),rootContainer,itemClicked,transitionName,movieListCopy.get(position).getId());
+        movieDetailsScene= MovieDetailsLayout.showScene(getActivity(), rootContainer, itemClicked, transitionName, movie.getId());
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, List<Movie> movieList) {
 
-        MovieListRecyclerAdapter movieListRecyclerAdapter = new MovieListRecyclerAdapter(getContext(), movieList, this);
+        MovieListRecyclerAdapter movieListRecyclerAdapter = new MovieListRecyclerAdapter(recyclerView, getContext(), movieList, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
