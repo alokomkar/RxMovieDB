@@ -134,9 +134,12 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     }
 
 
+    private RecyclerView selectedRecyclerView;
+
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemClicked, String transitionName, int position, Movie movie) {
         offset=rootContainer.getScaleY();
+        selectedRecyclerView = recyclerView;
         movieDetailsScene= MovieDetailsLayout.showScene(getActivity(), rootContainer, itemClicked, transitionName, movie.getId());
     }
 
