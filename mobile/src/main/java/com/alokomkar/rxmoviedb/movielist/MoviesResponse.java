@@ -14,7 +14,7 @@ import java.util.List;
  * Created by rajkiran on 12/06/17.
  */
 @JsonObject
-public class MoviesDetailsResponse {
+public class MoviesResponse {
     @JsonField(name = "page")
     private int page;
     @JsonField(name = "results")
