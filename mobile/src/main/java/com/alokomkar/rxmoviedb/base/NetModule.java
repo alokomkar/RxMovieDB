@@ -76,14 +76,14 @@ public class NetModule {
                 .build();
     }
 
-    public Cache getCache() {
+    private Cache getCache() {
         if( cache == null ) {
             cache = provideOkHttpCache(application);
         }
         return cache;
     }
 
-    public OkHttpClient getOkHttpClient() {
+    private OkHttpClient getOkHttpClient() {
         if( okHttpClient == null ) {
             okHttpClient = provideOkHttpClient(getCache());
         }

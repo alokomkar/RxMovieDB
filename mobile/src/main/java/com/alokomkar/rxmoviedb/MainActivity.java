@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.movieTrailerViewPager)
     ViewPager movieTrailerViewPager;
     private CollapsingToolbarLayout collapsingToolbar;
+    private FragmentTransaction mFragmentTransaction;
+    private MovieListFragment movieListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,18 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        loadMovieListFragment();
+    }
+
+    private void loadMovieListFragment() {
+        mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+        movieListFragment = (MovieListFragment) getSupportFragmentManager().findFragmentByTag(MovieListFragment.class.getSimpleName());
+        if (movieListFragment == null) {
+            movieListFragment = new MovieListFragment();
+        }
+        mFragmentTransaction.replace(R.id.container, movieListFragment, MovieListFragment.class.getSimpleName());
+        mFragmentTransaction.commit();
     }
 
     @Override
