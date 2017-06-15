@@ -12,13 +12,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.alokomkar.rxmoviedb.movielist.Movie;
 import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
+import com.alokomkar.rxmoviedb.trailers.TrailerFragment;
+import com.alokomkar.rxmoviedb.trailers.TrailerViewPagerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationListener {
 
     @BindView(R.id.movieTrailerViewPager)
     ViewPager movieTrailerViewPager;
@@ -83,5 +90,21 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onMoviesLoaded(List<Movie> movies) {
+        List<TrailerFragment> trailerFragments = new ArrayList<>();
+        for( Movie movie : movies ) {
+            TrailerFragment trailerFragment = new TrailerFragment();
+            trailerFragment.setMovie(movie);
+            trailerFragments.add(trailerFragment);
+        }
+        movieTrailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), trailerFragments));
+    }
+
+    @Override
+    public void playVideo(Movie movie) {
+        Toast.makeText(MainActivity.this, "Todo : Play video for : " + movie.getOriginalTitle(), Toast.LENGTH_SHORT).show();
     }
 }

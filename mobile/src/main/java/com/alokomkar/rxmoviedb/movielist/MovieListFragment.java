@@ -1,5 +1,6 @@
 package com.alokomkar.rxmoviedb.movielist;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,10 +15,11 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.alokomkar.rxmoviedb.GravitySnapHelper;
-import com.alokomkar.rxmoviedb.ItemOffsetDecoration;
 import com.alokomkar.rxmoviedb.MovieApplication;
+import com.alokomkar.rxmoviedb.NavigationListener;
 import com.alokomkar.rxmoviedb.R;
+import com.alokomkar.rxmoviedb.utils.GravitySnapHelper;
+import com.alokomkar.rxmoviedb.utils.ItemOffsetDecoration;
 
 import java.util.List;
 
@@ -51,6 +53,8 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     ProgressBar progressBar;
     Unbinder unbinder;
     private MovieListPresenter movieListPresenter;
+
+    private NavigationListener navigationListener;
 
 
     @Nullable
@@ -89,6 +93,7 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     @Override
     public void loadNowPlayingMovies(List<Movie> movieList) {
         setupRecyclerView( nowPlayingRecyclerView, movieList );
+        navigationListener.onMoviesLoaded( movieList );
     }
 
     @Override
@@ -129,5 +134,19 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
         snapHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(movieListRecyclerAdapter);
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if( context instanceof NavigationListener ) {
+            navigationListener = (NavigationListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        navigationListener = null;
+        super.onDetach();
     }
 }
