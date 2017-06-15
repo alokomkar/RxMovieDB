@@ -1,5 +1,7 @@
 package com.alokomkar.rxmoviedb.movielist;
 
+import com.alokomkar.rxmoviedb.base.Constants;
+
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -19,17 +21,22 @@ public class MovieListPresenter implements MovieListContract.Presenter {
     private Retrofit retrofit;
     private CompositeDisposable compositeDisposable;
 
-    private String filterType;
+    private String API_KEY;
 
     public MovieListPresenter(MovieListContract.View view, Retrofit retrofit) {
         this.view = view;
         this.retrofit = retrofit;
         this.compositeDisposable = new CompositeDisposable();
+        this.API_KEY = Constants.API_KEY;
     }
 
     @Override
     public void start() {
-
+        view.showProgress();
+        getLatestMovies(API_KEY);
+        getPopularMovies(API_KEY);
+        getNowPlayingMovies(API_KEY);
+        getTopRatedMovie(API_KEY);
     }
 
     @Override
@@ -39,30 +46,26 @@ public class MovieListPresenter implements MovieListContract.Presenter {
 
     @Override
     public void getTopRatedMovie(String APIKey) {
-        filterType = "topRated";
-        getMovies(APIKey);
+        getMovies(APIKey, "topRated");
     }
 
     @Override
     public void getPopularMovies(String APIKey) {
-        filterType = "popular";
-        getMovies(APIKey);
+        getMovies(APIKey, "popular");
     }
 
     @Override
     public void getLatestMovies(String APIKey) {
-        filterType = "latest";
-        getMovies(APIKey);
+        getMovies(APIKey, "latest");
     }
 
     @Override
     public void getNowPlayingMovies(String APIKey) {
-        filterType = "nowPlaying";
-        getMovies(APIKey);
+        getMovies(APIKey, "nowPlaying");
     }
 
-    private void getMovies(String apiKey) {
-        view.showProgress();
+    private void getMovies(String apiKey, String filterType) {
+
         MovieListAPI movieListAPI = retrofit.create(MovieListAPI.class);
         Observable<MoviesResponse> moviesResponseObservable = null;
         switch ( filterType ) {

@@ -11,4 +11,8 @@
     <dimen name="video_width">150dp</dimen>
     <dimen name="video_height">150dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="default_layout_margin">16dp</dimen>
+    <dimen name="default_layout_margin_halved">8dp</dimen>
+    <dimen name="text_18">18sp</dimen>
+    <dimen name="item_offset">4dp</dimen>
 </resources>
