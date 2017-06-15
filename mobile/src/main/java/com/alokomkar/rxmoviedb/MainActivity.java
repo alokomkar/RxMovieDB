@@ -13,12 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.alokomkar.rxmoviedb.movielist.Movie;
 import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
 import com.alokomkar.rxmoviedb.trailers.TrailerFragment;
 import com.alokomkar.rxmoviedb.trailers.TrailerViewPagerAdapter;
+import com.alokomkar.rxmoviedb.utils.DepthPageTransformer;
 import com.alokomkar.rxmoviedb.youtube.FragmentDemoActivity;
 
 import java.util.ArrayList;
@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void onMoviesLoaded(List<Movie> movies) {
+        movieTrailerViewPager.setPageTransformer(true, new DepthPageTransformer());
         List<TrailerFragment> trailerFragments = new ArrayList<>();
         for( Movie movie : movies ) {
             TrailerFragment trailerFragment = new TrailerFragment();
