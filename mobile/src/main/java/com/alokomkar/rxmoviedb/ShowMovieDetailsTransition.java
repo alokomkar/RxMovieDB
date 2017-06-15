@@ -43,21 +43,21 @@ public class ShowMovieDetailsTransition extends TransitionSet {
 
     private Transition textResize() {
         return new TransitionBuilder(new TextResizeTransition())
-                .link(from.findViewById(R.id.title), to.textViewTitle, titleTransitionName())
+                .link(from.findViewById(R.id.movieNameTextView), to.title, titleTransitionName())
                 .build();
     }
 
     private Transition slide() {
         return new TransitionBuilder(TransitionInflater.from(context).inflateTransition(R.transition.movie_details_enter_transition))
                 .excludeTarget(transitionName, true)
-                .excludeTarget(to.textViewTitle, true)
+                .excludeTarget(to.title, true)
                 .excludeTarget(to.rootCardView, true)
                 .build();
     }
 
     private Transition shared() {
         return new TransitionBuilder(TransitionInflater.from(context).inflateTransition(android.R.transition.move))
-                .link(from.findViewById(R.id.gridImage), to.imageViewPlaceDetails, transitionName)
+                .link(from.findViewById(R.id.card_view), to.imageViewPlaceDetails, transitionName)
                 .link(from, to.rootCardView, cardViewTransitionName())
                 .build();
     }
