@@ -1,6 +1,7 @@
 package com.alokomkar.rxmoviedb;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.alokomkar.rxmoviedb.movielist.Movie;
 import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
@@ -96,14 +99,21 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void onMoviesLoaded(List<Movie> movies) {
-        movieTrailerViewPager.setPageTransformer(true, new DepthPageTransformer());
-        List<TrailerFragment> trailerFragments = new ArrayList<>();
-        for( Movie movie : movies ) {
-            TrailerFragment trailerFragment = new TrailerFragment();
-            trailerFragment.setMovie(movie);
-            trailerFragments.add(trailerFragment);
+        if( movies != null ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                Window w = getWindow(); // in Activity's onCreate() for instance
+                w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            }
+
+            movieTrailerViewPager.setPageTransformer(true, new DepthPageTransformer());
+            List<TrailerFragment> trailerFragments = new ArrayList<>();
+            for( Movie movie : movies ) {
+                TrailerFragment trailerFragment = new TrailerFragment();
+                trailerFragment.setMovie(movie);
+                trailerFragments.add(trailerFragment);
+            }
+            movieTrailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), trailerFragments));
         }
-        movieTrailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), trailerFragments));
     }
 
     @Override
