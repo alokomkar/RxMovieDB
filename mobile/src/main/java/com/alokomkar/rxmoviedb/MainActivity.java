@@ -1,5 +1,6 @@
 package com.alokomkar.rxmoviedb;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,7 @@ import com.alokomkar.rxmoviedb.movielist.Movie;
 import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
 import com.alokomkar.rxmoviedb.trailers.TrailerFragment;
 import com.alokomkar.rxmoviedb.trailers.TrailerViewPagerAdapter;
+import com.alokomkar.rxmoviedb.youtube.FragmentDemoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void playVideo(Movie movie) {
-        Toast.makeText(MainActivity.this, "Todo : Play video for : " + movie.getOriginalTitle(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, FragmentDemoActivity.class);
+        startActivity(intent);
     }
 }

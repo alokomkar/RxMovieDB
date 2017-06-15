@@ -40,9 +40,13 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_trailer, container, false);
         unbinder = ButterKnife.bind(this, fragmentView);
-        String imgUrl = "http://image.tmdb.org/t/p/" + "w342" + movie.getBackdropPath();
+        String imgUrl = "";
+        if( movie != null ) {
+            imgUrl = "http://image.tmdb.org/t/p/" + "w342" + movie.getBackdropPath();
+        }
         Glide.with(getContext()).load(imgUrl)
                 .thumbnail(0.5f)
+                .error(R.mipmap.ic_launcher)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(trailerImageView);

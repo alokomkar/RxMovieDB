@@ -6,4 +6,5 @@ package com.alokomkar.rxmoviedb.base;
 
 public interface Constants {
     String API_KEY = "f4b2ebc8b5ef373a0c7e1d4d954fb181";
+    String TRAILER_ID = "trailer_id";
 }
