@@ -18,14 +18,14 @@ import retrofit2.Retrofit;
 
 public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
 
-    private final String movieId;
+    private final int movieId;
     private MovieDetailsContract.View view;
     private Retrofit retrofit;
     private CompositeDisposable compositeDisposable;
     private String API_KEY;
 
 
-    public MovieDetailsPresenter(MovieDetailsContract.View view, Retrofit retrofit , String movieId) {
+    public MovieDetailsPresenter(MovieDetailsContract.View view, Retrofit retrofit , int movieId) {
         this.view = view;
         this.retrofit = retrofit;
         this.compositeDisposable = new CompositeDisposable();
@@ -45,7 +45,7 @@ public class MovieDetailsPresenter implements MovieDetailsContract.Presenter {
     }
 
     @Override
-    public void getMovieDetails(String movieId, String apiKey) {
+    public void getMovieDetails(int movieId, String apiKey) {
 
         MovieDetailsAPI movieDetailsAPI = retrofit.create(MovieDetailsAPI.class);
         Observable<MovieDetailsResponse> moviesResponseObservable = null;

@@ -44,13 +44,11 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
     }
 
 
-    public Scene showScene(Activity activity, final ViewGroup container, final View clickedPictureView, final String transitionName, String movieId) {
-       // spacingInPixels = activity.getResources().getDimensionPixelSize(R.dimen.spacing);
-       // gridActivity=activity;
+    public static Scene showScene(Activity activity, final ViewGroup container, final View clickedPictureView, final String transitionName, int movieId) {
+
         MovieDetailsLayout movieDetailsLayout = (MovieDetailsLayout) activity.getLayoutInflater().inflate(R.layout.details_layout, container, false);
-        movieDetailsPresenter=new MovieDetailsPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit(),movieId);
+        movieDetailsPresenter=new MovieDetailsPresenter(movieDetailsLayout, MovieApplication.getInstance().getNetModule().getRetrofit(),movieId);
         movieDetailsPresenter.start();
-        //   detailsLayout.setData(data);
         TransitionSet set = new ShowMovieDetailsTransition(activity, transitionName, clickedPictureView, movieDetailsLayout);
         Scene scene = new Scene(container, (View) movieDetailsLayout);
         TransitionManager.go(scene, set);

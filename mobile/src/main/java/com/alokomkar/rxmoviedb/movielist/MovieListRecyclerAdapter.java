@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alokomkar.rxmoviedb.R;
+import com.alokomkar.rxmoviedb.TransitionUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
@@ -24,12 +26,14 @@ import butterknife.ButterKnife;
 
 public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecyclerAdapter.ViewHolder> {
 
+
     private Context context;
     private List<Movie> movieList;
     private ItemClickListener itemClickListener;
 
+
     public interface ItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(View sharedView, String transitionName, final int position);
     }
 
     public MovieListRecyclerAdapter(Context context, List<Movie> movieList, ItemClickListener itemClickListener) {
@@ -73,6 +77,8 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
         ImageView movieImageView;
         @BindView(R.id.movieNameTextView)
         TextView movieNameTextView;
+        @BindView(R.id.rootId)
+        RelativeLayout rootId;
 
         public ViewHolder(View view) {
             super(view);
@@ -83,8 +89,8 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if( position != RecyclerView.NO_POSITION ) {
-                itemClickListener.onItemClick(position);
+            if (position != RecyclerView.NO_POSITION) {
+                itemClickListener.onItemClick(view,TransitionUtils.getRecyclerViewTransitionName(position),position);
             }
         }
     }

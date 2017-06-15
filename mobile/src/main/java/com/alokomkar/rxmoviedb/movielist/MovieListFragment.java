@@ -1,12 +1,16 @@
 package com.alokomkar.rxmoviedb.movielist;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.transition.Scene;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +22,7 @@ import com.alokomkar.rxmoviedb.GravitySnapHelper;
 import com.alokomkar.rxmoviedb.ItemOffsetDecoration;
 import com.alokomkar.rxmoviedb.MovieApplication;
 import com.alokomkar.rxmoviedb.R;
+import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLayout;
 
 import java.util.List;
 
@@ -28,7 +33,7 @@ import butterknife.Unbinder;
 /**
  * Created by Alok on 15/06/17.
  */
-
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class MovieListFragment extends Fragment implements MovieListContract.View, MovieListRecyclerAdapter.ItemClickListener {
 
     @BindView(R.id.newTrailerTextView)
@@ -50,7 +55,12 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     Unbinder unbinder;
+    @BindView(R.id.rootContainer)
+    NestedScrollView rootContainer;
     private MovieListPresenter movieListPresenter;
+    private Scene movieDetailsScene;
+    private List<Movie> movieList;
+    private float offset;
 
 
     @Nullable
@@ -71,24 +81,27 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
 
     @Override
     public void loadTopRatedMovies(List<Movie> movieList) {
-        setupRecyclerView( topMoviesRecyclerView, movieList );
+        movieList=movieList;
+        setupRecyclerView(topMoviesRecyclerView, movieList);
     }
-
 
 
     @Override
     public void loadPopularMovies(List<Movie> movieList) {
-        setupRecyclerView( popularMoviesRecyclerView, movieList );
+        movieList=movieList;
+        setupRecyclerView(popularMoviesRecyclerView, movieList);
     }
 
     @Override
     public void loadLatestMovies(List<Movie> movieList) {
-        setupRecyclerView( latestMoviesRecyclerView, movieList );
+        movieList=movieList;
+        setupRecyclerView(latestMoviesRecyclerView, movieList);
     }
 
     @Override
     public void loadNowPlayingMovies(List<Movie> movieList) {
-        setupRecyclerView( nowPlayingRecyclerView, movieList );
+        movieList=movieList;
+        setupRecyclerView(nowPlayingRecyclerView, movieList);
     }
 
     @Override
@@ -112,9 +125,11 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
         unbinder.unbind();
     }
 
-    @Override
-    public void onItemClick(int position) {
 
+    @Override
+    public void onItemClick(View itemClicked, String transitionName, int position) {
+        offset=rootContainer.getScaleY();
+        movieDetailsScene= MovieDetailsLayout.showScene(getActivity(),rootContainer,itemClicked,transitionName,movieList.get(position).getId());
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, List<Movie> movieList) {

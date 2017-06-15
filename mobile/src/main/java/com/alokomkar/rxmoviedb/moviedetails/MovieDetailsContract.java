@@ -25,7 +25,7 @@ public interface MovieDetailsContract {
 
     interface  Presenter extends BasePresenter
     {
-        void getMovieDetails(String movieId,String APIkEY);
+        void getMovieDetails(int movieId,String APIkEY);
     }
 
 }
