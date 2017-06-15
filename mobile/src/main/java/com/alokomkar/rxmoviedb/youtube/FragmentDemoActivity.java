@@ -19,7 +19,6 @@ package com.alokomkar.rxmoviedb.youtube;
 import android.os.Bundle;
 
 import com.alokomkar.rxmoviedb.R;
-import com.alokomkar.rxmoviedb.base.Constants;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
@@ -41,7 +40,7 @@ public class FragmentDemoActivity extends YouTubeFailureRecoveryActivity {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.fragments_demo);
-    video = getIntent().getExtras().getString(Constants.TRAILER_ID);
+    //video = getIntent().getExtras().getString(Constants.TRAILER_ID);
 
     YouTubePlayerFragment youTubePlayerFragment =
         (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_fragment);
