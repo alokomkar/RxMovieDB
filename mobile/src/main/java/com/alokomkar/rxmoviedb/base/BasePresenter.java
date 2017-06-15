@@ -6,4 +6,5 @@ package com.alokomkar.rxmoviedb.base;
 
 public interface BasePresenter {
     void start();
+    void stop();
 }
