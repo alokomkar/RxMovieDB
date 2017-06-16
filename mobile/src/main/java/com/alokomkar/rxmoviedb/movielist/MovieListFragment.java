@@ -1,20 +1,18 @@
 package com.alokomkar.rxmoviedb.movielist;
 
 
-import android.os.Build;
-
 import android.content.Context;
-
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.transition.Scene;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,10 +28,8 @@ import com.alokomkar.rxmoviedb.R;
 
 import com.alokomkar.rxmoviedb.TransitionUtils;
 import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLayout;
-
 import com.alokomkar.rxmoviedb.utils.GravitySnapHelper;
 import com.alokomkar.rxmoviedb.utils.ItemOffsetDecoration;
-
 
 import java.util.List;
 
@@ -104,6 +100,11 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     @Override
     public void loadPopularMovies(List<Movie> movieList) {
         setupRecyclerView(popularMoviesRecyclerView, movieList);
+
+        for(int i=0;i<movieList.size();i++)
+        {
+            Log.d("posterpath",movieList.get(i).getPosterPath());
+        }
     }
 
     @Override
@@ -152,7 +153,6 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, List<Movie> movieList) {
-
 
         movieListRecyclerAdapter = new MovieListRecyclerAdapter(recyclerView, getContext(), movieList, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, LinearLayoutManager.HORIZONTAL, false);

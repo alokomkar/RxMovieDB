@@ -4,8 +4,6 @@ import com.alokomkar.rxmoviedb.base.BasePresenter;
 import com.alokomkar.rxmoviedb.base.BaseView;
 import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
 
-import java.util.List;
-
 /**
  * Created by rahul on 15/06/17.
  */

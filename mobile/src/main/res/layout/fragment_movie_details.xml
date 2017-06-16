@@ -90,6 +90,7 @@
             android:layout_marginLeft="@dimen/default_layout_margin"
             android:layout_below="@+id/description"
             android:textSize="22sp"
+            android:visibility="gone"
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:text="Trailers"/>

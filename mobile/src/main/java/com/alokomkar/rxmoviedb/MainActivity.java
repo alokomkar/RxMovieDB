@@ -1,7 +1,7 @@
 package com.alokomkar.rxmoviedb;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -17,9 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
+import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLandscapeFragment;
 import com.alokomkar.rxmoviedb.movielist.Movie;
+import com.alokomkar.rxmoviedb.movielist.MovieListContract;
 import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
+import com.alokomkar.rxmoviedb.movielist.MovieListPresenter;
 import com.alokomkar.rxmoviedb.trailers.TrailerFragment;
 import com.alokomkar.rxmoviedb.trailers.TrailerViewPagerAdapter;
 import com.alokomkar.rxmoviedb.utils.DepthPageTransformer;
@@ -28,22 +32,26 @@ import com.alokomkar.rxmoviedb.youtube.FragmentDemoActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationListener {
+public class MainActivity extends AppCompatActivity implements NavigationListener, MovieListContract.View {
 
 
     private ViewPager movieTrailerViewPager;
     private CollapsingToolbarLayout collapsingToolbar;
     private FragmentTransaction mFragmentTransaction;
     private MovieListFragment movieListFragment;
+    private FrameLayout progressLayout;
+    private MovieListPresenter movieListPresenter;
+    private List<Movie> viewPagerMovies;
 
     @Override
     public void onBackPressed() {
         if(movieListFragment!=null && movieListFragment.movieDetailsScene!=null)
         {
-            movieListFragment.onBackPressedWithScene();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                movieListFragment.onBackPressedWithScene();
+            }
         }
         else
         {
@@ -60,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         //landscape mode
         if(findViewById(R.id.movieTrailerViewPager) != null) {
 
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
             movieTrailerViewPager = (ViewPager)findViewById(R.id.movieTrailerViewPager);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -71,17 +81,47 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolbar);
             collapsingToolbar.setTitleEnabled(true);
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });
+            fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show());
+
+            movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
+            movieListPresenter.start();
 
         }
-        loadMovieListFragment();
+        else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            loadMovieListFragment();
+        }
+
     }
+
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if( viewPagerMovies != null && viewPagerMovies.size() > 0 ) {
+                loadMovieDetailsFragment( viewPagerMovies.get(position) );
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+
+    private void loadMovieDetailsFragment(Movie movie) {
+        mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+        MovieDetailsLandscapeFragment movieDetailsLandscapeFragment = MovieDetailsLandscapeFragment.getInstance();
+        movieDetailsLandscapeFragment.setMovieId(movie.getId());
+        mFragmentTransaction.replace(R.id.container, movieDetailsLandscapeFragment, MovieListFragment.class.getSimpleName());
+        mFragmentTransaction.commit();
+    }
+
 
     private void loadMovieListFragment() {
         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -93,30 +133,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         mFragmentTransaction.commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onMoviesLoaded(List<Movie> movies) {
         if( movieTrailerViewPager != null && movies != null ) {
+            viewPagerMovies = movies;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 Window w = getWindow(); // in Activity's onCreate() for instance
                 w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -130,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
                 trailerFragments.add(trailerFragment);
             }
             movieTrailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), trailerFragments));
+            movieTrailerViewPager.addOnPageChangeListener( pageChangeListener );
+            if( viewPagerMovies != null && viewPagerMovies.size() > 0 ) {
+                loadMovieDetailsFragment( viewPagerMovies.get(0) );
+            }
+
         }
     }
 
@@ -137,5 +163,45 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     public void playVideo(Movie movie) {
         Intent intent = new Intent(MainActivity.this, FragmentDemoActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void setPresenter(Object presenter) {
+
+    }
+
+    @Override
+    public void loadTopRatedMovies(List<Movie> movieList) {
+
+    }
+
+    @Override
+    public void loadPopularMovies(List<Movie> movieList) {
+
+    }
+
+    @Override
+    public void loadLatestMovies(List<Movie> movieList) {
+
+    }
+
+    @Override
+    public void loadNowPlayingMovies(List<Movie> movieList) {
+        onMoviesLoaded( movieList );
+    }
+
+    @Override
+    public void showProgress() {
+        progressLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onFailure(String msg) {
+
     }
 }

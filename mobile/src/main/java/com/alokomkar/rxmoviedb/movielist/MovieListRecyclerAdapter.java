@@ -2,7 +2,9 @@ package com.alokomkar.rxmoviedb.movielist;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +56,7 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
 
         Movie movie = movieList.get(i);
 
-        String imgUrl = "http://image.tmdb.org/t/p/" + "w342" + movieList.get(i).getBackdropPath();
+        String imgUrl = "http://image.tmdb.org/t/p/" + "w342" + movieList.get(i).getPosterPath();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             customViewHolder.movieImageView.setClipToOutline(true);
         }
@@ -62,6 +64,9 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
         Glide.with(context).load(imgUrl)
                 .thumbnail(0.5f)
                 .crossFade()
+                .centerCrop()
+                .placeholder(ContextCompat.getDrawable(context, R.mipmap.ic_launcher))
+                .error(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(customViewHolder.movieImageView);
         customViewHolder.movieNameTextView.setText(movie.getOriginalTitle());

@@ -52,7 +52,7 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
     @BindView(R.id.appbar)
     AppBarLayout appbar;
     @BindView(R.id.title)
-   public TextView title;
+    public TextView title;
     @BindView(R.id.movieLimit)
     TextView movieLimit;
     @BindView(R.id.starCastText)
@@ -66,7 +66,7 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
     @BindView(R.id.trailerRecyclerView)
     RecyclerView trailerRecyclerView;
     @BindView(R.id.rootCardView)
-   public RelativeLayout rootCardView;
+    public RelativeLayout rootCardView;
     @BindView(R.id.scrolling_container)
     NestedScrollView scrollingContainer;
     @BindView(R.id.main_content)
@@ -164,13 +164,17 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
 
     @Override
     public void setMovieDetails(MovieDetailsResponse details) {
-        Log.d("title",details.getTitle()+" "+details.getPosterPath());
-        title.setText(details.getTitle());
-        Glide.with(getContext()).load(prefixImgUrl+details.getPosterPath())
+
+        Glide.with(getContext()).load(prefixImgUrl+details.getBackdropPath())
                 .centerCrop()
-                .error(R.drawable.app_background)
+                .error(R.mipmap.ic_launcher)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageViewPlaceDetails);
+
+        title.setText(details.getOriginalTitle());
+        movieLimit.setText(details.getReleaseDate());
+        starCastText.setText(details.getOriginalLanguage());
+        description.setText(details.getOverview());
 
     }
 }

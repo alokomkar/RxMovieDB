@@ -13,79 +13,80 @@ import java.util.List;
 public class MovieDetailsResponse {
 
     @JsonField(name = "adult")
-    
+
+
     private Boolean adult;
     @JsonField(name = "backdrop_path")
-    
+
     private String backdropPath;
     @JsonField(name = "belongs_to_collection")
-    
+
     private BelongsToCollection belongsToCollection;
     @JsonField(name = "budget")
-    
+
     private Integer budget;
     @JsonField(name = "genres")
-    
+
     private List<Genre> genres = null;
     @JsonField(name = "homepage")
-    
+
     private String homepage;
     @JsonField(name = "id")
-    
+
     private Integer id;
     @JsonField(name = "imdb_id")
-    
+
     private String imdbId;
     @JsonField(name = "original_language")
-    
+
     private String originalLanguage;
     @JsonField(name = "original_title")
-    
+
     private String originalTitle;
     @JsonField(name = "overview")
-    
+
     private String overview;
     @JsonField(name = "popularity")
-    
+
     private Double popularity;
     @JsonField(name = "poster_path")
-    
+
     private String posterPath;
     @JsonField(name = "production_companies")
-    
+
     private List<ProductionCompany> productionCompanies = null;
     @JsonField(name = "production_countries")
-    
+
     private List<ProductionCountry> productionCountries = null;
     @JsonField(name = "release_date")
-    
+
     private String releaseDate;
     @JsonField(name = "revenue")
-    
+
     private Integer revenue;
     @JsonField(name = "runtime")
-    
+
     private Integer runtime;
     @JsonField(name = "spoken_languages")
-    
+
     private List<SpokenLanguage> spokenLanguages = null;
     @JsonField(name = "status")
-    
+
     private String status;
     @JsonField(name = "tagline")
-    
+
     private String tagline;
     @JsonField(name = "title")
-    
+
     private String title;
     @JsonField(name = "video")
-    
+
     private Boolean video;
     @JsonField(name = "vote_average")
-    
+
     private Double voteAverage;
     @JsonField(name = "vote_count")
-    
+
     private Integer voteCount;
 
     public Boolean getAdult() {
@@ -287,5 +288,6 @@ public class MovieDetailsResponse {
     public void setVoteCount(Integer voteCount) {
         this.voteCount = voteCount;
     }
+
 
 }
