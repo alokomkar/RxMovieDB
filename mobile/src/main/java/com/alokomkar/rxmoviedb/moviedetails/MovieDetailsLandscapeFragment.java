@@ -8,6 +8,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +60,7 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
     private int movieId;
     private MovieDetailsPresenter movieDetailsPresenter;
     private TrailerAdapter mTrailerAdapter;
+    private String TAG = MovieDetailsLandscapeFragment.class.getSimpleName();
 
     public static MovieDetailsLandscapeFragment getInstance() {
         if( instance == null ) {
@@ -113,6 +115,7 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
         movieLimit.setText(details.getReleaseDate());
         starCastText.setText(details.getOriginalLanguage());
         description.setText(details.getOverview());
+        movieDetailsPresenter.getTrailers(details.getId());
     }
 
     @Override
@@ -122,6 +125,7 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
             trailerText.setVisibility(View.GONE);
         }
         else {
+            Log.d(TAG, "Trailers : " + trailers.size());
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             trailerRecyclerView.setLayoutManager(linearLayoutManager);
