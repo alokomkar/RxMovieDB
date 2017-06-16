@@ -1,10 +1,8 @@
 package com.alokomkar.rxmoviedb.movielist;
 
 
-import android.os.Build;
-
 import android.content.Context;
-
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -26,12 +24,10 @@ import android.widget.TextView;
 import com.alokomkar.rxmoviedb.MovieApplication;
 import com.alokomkar.rxmoviedb.NavigationListener;
 import com.alokomkar.rxmoviedb.R;
-
 import com.alokomkar.rxmoviedb.TransitionUtils;
-
+import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLayout;
 import com.alokomkar.rxmoviedb.utils.GravitySnapHelper;
 import com.alokomkar.rxmoviedb.utils.ItemOffsetDecoration;
-
 
 import java.util.List;
 

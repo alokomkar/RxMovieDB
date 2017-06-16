@@ -1,6 +1,7 @@
 package com.alokomkar.rxmoviedb.moviedetails;
 
 import com.alokomkar.rxmoviedb.base.Constants;
+import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
