@@ -1,7 +1,7 @@
 package com.alokomkar.rxmoviedb;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -17,9 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import com.alokomkar.rxmoviedb.movielist.Movie;
+import com.alokomkar.rxmoviedb.movielist.MovieListContract;
 import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
+import com.alokomkar.rxmoviedb.movielist.MovieListPresenter;
 import com.alokomkar.rxmoviedb.trailers.TrailerFragment;
 import com.alokomkar.rxmoviedb.trailers.TrailerViewPagerAdapter;
 import com.alokomkar.rxmoviedb.utils.DepthPageTransformer;
@@ -28,22 +31,25 @@ import com.alokomkar.rxmoviedb.youtube.FragmentDemoActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationListener {
+public class MainActivity extends AppCompatActivity implements NavigationListener, MovieListContract.View {
 
 
     private ViewPager movieTrailerViewPager;
     private CollapsingToolbarLayout collapsingToolbar;
     private FragmentTransaction mFragmentTransaction;
     private MovieListFragment movieListFragment;
+    private FrameLayout progressLayout;
+    private MovieListPresenter movieListPresenter;
 
     @Override
     public void onBackPressed() {
         if(movieListFragment!=null && movieListFragment.movieDetailsScene!=null)
         {
-            movieListFragment.onBackPressedWithScene();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                movieListFragment.onBackPressedWithScene();
+            }
         }
         else
         {
@@ -60,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         //landscape mode
         if(findViewById(R.id.movieTrailerViewPager) != null) {
 
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
             movieTrailerViewPager = (ViewPager)findViewById(R.id.movieTrailerViewPager);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -79,9 +87,35 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
                 }
             });
 
+
+
+            movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
+            movieListPresenter.start();
+
         }
-        loadMovieListFragment();
+        else {
+            loadMovieListFragment();
+        }
+
     }
+
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+
 
     private void loadMovieListFragment() {
         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -130,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
                 trailerFragments.add(trailerFragment);
             }
             movieTrailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), trailerFragments));
+            movieTrailerViewPager.addOnPageChangeListener( pageChangeListener );
+
         }
     }
 
@@ -137,5 +173,45 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     public void playVideo(Movie movie) {
         Intent intent = new Intent(MainActivity.this, FragmentDemoActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void setPresenter(Object presenter) {
+
+    }
+
+    @Override
+    public void loadTopRatedMovies(List<Movie> movieList) {
+
+    }
+
+    @Override
+    public void loadPopularMovies(List<Movie> movieList) {
+
+    }
+
+    @Override
+    public void loadLatestMovies(List<Movie> movieList) {
+
+    }
+
+    @Override
+    public void loadNowPlayingMovies(List<Movie> movieList) {
+        onMoviesLoaded( movieList );
+    }
+
+    @Override
+    public void showProgress() {
+        progressLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onFailure(String msg) {
+
     }
 }
