@@ -1,0 +1,115 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/firstChild"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/newTrailerTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/default_layout_margin"
+                android:layout_marginStart="@dimen/default_layout_margin"
+                android:layout_marginTop="@dimen/default_layout_margin_halved"
+                android:text="@string/now_playing"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/nowPlayingRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_layout_margin"
+                android:layout_marginLeft="@dimen/default_layout_margin_halved"
+                android:layout_marginRight="@dimen/default_layout_margin_halved"
+                android:layout_marginTop="@dimen/default_layout_margin_halved" />
+
+            <TextView
+                android:id="@+id/popularTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/default_layout_margin"
+                android:layout_marginStart="@dimen/default_layout_margin"
+                android:layout_marginTop="@dimen/default_layout_margin"
+                android:text="@string/popular_movies"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/popularMoviesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_layout_margin"
+                android:layout_marginLeft="@dimen/default_layout_margin_halved"
+                android:layout_marginRight="@dimen/default_layout_margin_halved"
+                android:layout_marginTop="@dimen/default_layout_margin_halved" />
+
+            <TextView
+                android:id="@+id/topRatedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/default_layout_margin"
+                android:layout_marginStart="@dimen/default_layout_margin"
+                android:layout_marginTop="@dimen/default_layout_margin"
+                android:text="@string/top_rated"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/topMoviesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_layout_margin"
+                android:layout_marginLeft="@dimen/default_layout_margin_halved"
+                android:layout_marginRight="@dimen/default_layout_margin_halved"
+                android:layout_marginTop="@dimen/default_layout_margin_halved" />
+
+            <TextView
+                android:id="@+id/latestTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/default_layout_margin"
+                android:layout_marginStart="@dimen/default_layout_margin"
+                android:layout_marginTop="@dimen/default_layout_margin"
+                android:text="@string/latest_movies"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/latestMoviesRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_layout_margin"
+                android:layout_marginLeft="@dimen/default_layout_margin_halved"
+                android:layout_marginRight="@dimen/default_layout_margin_halved"
+                android:layout_marginTop="@dimen/default_layout_margin_halved" />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true" />
+
+
+    </RelativeLayout>
+</ScrollView>
