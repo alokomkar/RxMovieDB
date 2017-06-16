@@ -1,0 +1,111 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrolling_container"
+    android:background="@drawable/app_background"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    <RelativeLayout
+        android:id="@+id/rootCardView"
+        android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_marginTop="@dimen/default_layout_margin"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/default_layout_margin"
+            android:paddingRight="@dimen/default_layout_margin"
+            tools:text="MONKEY FOREST"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_18"
+            android:transitionName="titleTransition" />
+
+
+        <TextView
+            android:id="@+id/movieLimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:paddingLeft="@dimen/default_layout_margin"
+            android:paddingRight="@dimen/default_layout_margin"
+            android:paddingTop="@dimen/default_layout_margin_halved"
+            android:textSize="@dimen/text_16"
+            tools:text="1Hour 35 minute"
+            android:textColor="@android:color/white" />
+
+
+        <TextView
+            android:id="@+id/starCastText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movieLimit"
+            android:paddingLeft="@dimen/default_layout_margin"
+            android:textStyle="normal"
+            android:paddingTop="@dimen/default_layout_margin_halved"
+            android:textSize="@dimen/text_16"
+            android:textColor="@android:color/white"
+            android:text="Language : "/>
+
+        <TextView
+            android:id="@+id/starCast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movieLimit"
+            android:paddingLeft="@dimen/default_layout_margin_halved"
+            android:paddingRight="@dimen/default_layout_margin"
+            android:paddingTop="8dp"
+            android:textSize="@dimen/text_16"
+            android:textColor="@android:color/white"
+            android:layout_toRightOf="@+id/starCastText"
+            tools:text="Tom Cruise, Angelina Jolie, Brad Pitt"
+            />
+
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/starCast"
+            android:textSize="@dimen/text_16"
+            android:padding="@dimen/default_layout_margin"
+            tools:text="Nice movie. Go and watch . If you dont watch its your loss. People rated it 5 star. thats not our problem."
+            android:textColor="@android:color/white" />
+
+
+
+        <TextView
+            android:id="@+id/trailerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_layout_margin"
+            android:layout_below="@+id/description"
+            android:textSize="22sp"
+            android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:text="Trailers"/>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trailerRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_layout_margin"
+            android:layout_marginBottom="@dimen/default_layout_margin"
+            android:layout_marginLeft="@dimen/default_layout_margin_halved"
+            android:layout_marginRight="@dimen/default_layout_margin_halved"
+            android:layout_below="@id/trailerText"></android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>

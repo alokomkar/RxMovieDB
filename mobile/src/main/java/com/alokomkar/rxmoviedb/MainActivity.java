@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLandscapeFragment;
 import com.alokomkar.rxmoviedb.movielist.Movie;
 import com.alokomkar.rxmoviedb.movielist.MovieListContract;
 import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     private MovieListFragment movieListFragment;
     private FrameLayout progressLayout;
     private MovieListPresenter movieListPresenter;
+    private List<Movie> viewPagerMovies;
 
     @Override
     public void onBackPressed() {
@@ -79,15 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolbar);
             collapsingToolbar.setTitleEnabled(true);
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });
-
-
+            fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show());
 
             movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
             movieListPresenter.start();
@@ -107,7 +102,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
         @Override
         public void onPageSelected(int position) {
-
+            if( viewPagerMovies != null && viewPagerMovies.size() > 0 ) {
+                loadMovieDetailsFragment( viewPagerMovies.get(position) );
+            }
         }
 
         @Override
@@ -115,6 +112,14 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
         }
     };
+
+    private void loadMovieDetailsFragment(Movie movie) {
+        mFragmentTransaction = getSupportFragmentManager().beginTransaction();
+        MovieDetailsLandscapeFragment movieDetailsLandscapeFragment = MovieDetailsLandscapeFragment.getInstance();
+        movieDetailsLandscapeFragment.setMovieId(movie.getId());
+        mFragmentTransaction.replace(R.id.container, movieDetailsLandscapeFragment, MovieListFragment.class.getSimpleName());
+        mFragmentTransaction.commit();
+    }
 
 
     private void loadMovieListFragment() {
@@ -151,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void onMoviesLoaded(List<Movie> movies) {
         if( movieTrailerViewPager != null && movies != null ) {
+            viewPagerMovies = movies;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 Window w = getWindow(); // in Activity's onCreate() for instance
                 w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -165,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             }
             movieTrailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), trailerFragments));
             movieTrailerViewPager.addOnPageChangeListener( pageChangeListener );
+            if( viewPagerMovies != null && viewPagerMovies.size() > 0 ) {
+                loadMovieDetailsFragment( viewPagerMovies.get(0) );
+            }
 
         }
     }
