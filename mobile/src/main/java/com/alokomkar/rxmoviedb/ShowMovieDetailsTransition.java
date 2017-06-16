@@ -57,7 +57,7 @@ public class ShowMovieDetailsTransition extends TransitionSet {
 
     private Transition shared() {
         return new TransitionBuilder(TransitionInflater.from(context).inflateTransition(android.R.transition.move))
-                .link(from.findViewById(R.id.movieImageView), to.imageViewPlaceDetails, transitionName)
+                .link(from.findViewById(R.id.card_view), to.imageViewPlaceDetails, transitionName)
                 .link(from, to.rootCardView, cardViewTransitionName())
                 .build();
     }

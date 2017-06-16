@@ -56,7 +56,7 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
 
         Movie movie = movieList.get(i);
 
-        String imgUrl = "http://image.tmdb.org/t/p/" + "w342" + movieList.get(i).getPosterPath();
+        String imgUrl = "http://image.tmdb.org/t/p/" + "original" + movieList.get(i).getPosterPath();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             customViewHolder.movieImageView.setClipToOutline(true);
         }
@@ -95,6 +95,8 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
 
         @Override
         public void onClick(View view) {
+
+
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 itemClickListener.onItemClick(
