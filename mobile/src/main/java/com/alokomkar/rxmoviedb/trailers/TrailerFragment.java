@@ -42,7 +42,7 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
         unbinder = ButterKnife.bind(this, fragmentView);
         String imgUrl = "";
         if( movie != null ) {
-            imgUrl = "http://image.tmdb.org/t/p/" + "w342" + movie.getBackdropPath();
+            imgUrl = "http://image.tmdb.org/t/p/" + "original" + movie.getBackdropPath();
         }
         Glide.with(getContext()).load(imgUrl)
                 .thumbnail(0.5f)
