@@ -35,7 +35,7 @@
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
                     android:scaleType="centerCrop"
-                    tools:src="@drawable/app_background"
+                    android:src="@drawable/app_background"
                     app:layout_collapseMode="parallax"/>
 
                 <android.support.v7.widget.Toolbar
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/default_layout_margin"
                     android:paddingRight="@dimen/default_layout_margin"
-                    android:text="MONKEY FOREST"
+                    tools:text="MONKEY FOREST"
                     android:textColor="@android:color/white"
                     android:textSize="26sp"
                     android:textStyle="bold"
@@ -90,7 +90,7 @@
                     android:paddingRight="@dimen/default_layout_margin"
                     android:paddingTop="@dimen/default_layout_margin_halved"
                     android:textSize="18sp"
-                    android:text="1Hour 35 minute"
+                    tools:text="1Hour 35 minute"
                     android:textColor="@android:color/black" />
 
 
@@ -104,7 +104,7 @@
                     android:paddingTop="@dimen/default_layout_margin_halved"
                     android:textSize="18sp"
                     android:textColor="@android:color/black"
-                    android:text="Star cast : "/>
+                    tools:text="Star cast : "/>
 
                 <TextView
                     android:id="@+id/starCast"
@@ -117,7 +117,7 @@
                     android:textSize="18sp"
                     android:textColor="@android:color/black"
                     android:layout_toRightOf="@+id/starCastText"
-                    android:text="Tom Cruise, Angelina Jolie, Brad Pitt"
+                    tools:text="Tom Cruise, Angelina Jolie, Brad Pitt"
                     />
 
 
@@ -128,7 +128,7 @@
                     android:layout_below="@id/starCast"
                     android:textSize="18sp"
                     android:padding="@dimen/default_layout_margin"
-                    android:text="Nice movie. Go and watch . If you dont watch its your loss. People rated it 5 star. thats not our problem."
+                    tools:text="Nice movie. Go and watch . If you dont watch its your loss. People rated it 5 star. thats not our problem."
                     android:textColor="@android:color/black" />
 
 
@@ -140,6 +140,7 @@
                     android:layout_marginLeft="@dimen/default_layout_margin"
                     android:layout_below="@+id/description"
                     android:textSize="22sp"
+                    android:visibility="gone"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
 

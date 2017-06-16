@@ -1,6 +1,7 @@
 package com.alokomkar.rxmoviedb;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -32,11 +33,23 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements NavigationListener {
 
-    @BindView(R.id.movieTrailerViewPager)
-    ViewPager movieTrailerViewPager;
+
+    private ViewPager movieTrailerViewPager;
     private CollapsingToolbarLayout collapsingToolbar;
     private FragmentTransaction mFragmentTransaction;
     private MovieListFragment movieListFragment;
+
+    @Override
+    public void onBackPressed() {
+        if(movieListFragment!=null && movieListFragment.movieDetailsScene!=null)
+        {
+            movieListFragment.onBackPressedWithScene();
+        }
+        else
+        {
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,25 +57,29 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //landscape mode
+        if(findViewById(R.id.movieTrailerViewPager) != null) {
 
-        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setContentScrimColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-        collapsingToolbar.setTitle(getString(R.string.app_name));
-        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolbar);
-        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolbar);
-        collapsingToolbar.setTitleEnabled(true);
+            movieTrailerViewPager = (ViewPager)findViewById(R.id.movieTrailerViewPager);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+            collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+            collapsingToolbar.setContentScrimColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+            collapsingToolbar.setTitle(getString(R.string.app_name));
+            collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolbar);
+            collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolbar);
+            collapsingToolbar.setTitleEnabled(true);
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
 
+        }
         loadMovieListFragment();
     }
 
@@ -99,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void onMoviesLoaded(List<Movie> movies) {
-        if( movies != null ) {
+        if( movieTrailerViewPager != null && movies != null ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 Window w = getWindow(); // in Activity's onCreate() for instance
                 w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);

@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:id="@+id/rootContainer"
     android:layout_width="match_parent"
-    android:background="@drawable/app_background"
+    android:layout_height="match_parent">
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/firstChild"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
@@ -22,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_layout_margin"
                 android:layout_marginLeft="@dimen/default_layout_margin"
-                android:layout_marginTop="@dimen/default_layout_margin"
+                  android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="@string/now_playing"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/text_18"
@@ -106,8 +113,6 @@
 
         </LinearLayout>
 
-
-
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -119,5 +124,7 @@
 
 
     </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+</ScrollView>
+</RelativeLayout>
+
 

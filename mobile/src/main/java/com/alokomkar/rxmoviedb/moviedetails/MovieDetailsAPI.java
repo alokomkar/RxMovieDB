@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 
 public interface MovieDetailsAPI {
 
-     @GET("movie/{movie_id}")
-     Observable<MovieDetailsResponse> getMovieDetails(@Path("movie_id") int movieid, @Query("api_key") String apikEY );
+     @GET("movie/{id}")
+     Observable<MovieDetailsResponse> getMovieDetails(@Path("id") int movieid, @Query("api_key") String apikEY );
 
 }

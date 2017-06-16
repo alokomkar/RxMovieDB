@@ -4,7 +4,7 @@ public class TransitionUtils {
     private static final String DEFAULT_TRANSITION_NAME = "transition";
 
     public static int getItemPositionFromTransition(final String transitionName) {
-        return Integer.parseInt(transitionName.substring(transitionName.length() - 1));
+        return Integer.parseInt(transitionName.replace("transition",""));
     }
 
     public static String getRecyclerViewTransitionName(final int position) {
