@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,13 +19,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.alokomkar.rxmoviedb.MovieApplication;
 import com.alokomkar.rxmoviedb.NavigationListener;
 import com.alokomkar.rxmoviedb.R;
 
-import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLayout;
+import com.alokomkar.rxmoviedb.TransitionUtils;
 
 import com.alokomkar.rxmoviedb.utils.GravitySnapHelper;
 import com.alokomkar.rxmoviedb.utils.ItemOffsetDecoration;
@@ -64,12 +65,16 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     ProgressBar progressBar;
     Unbinder unbinder;
     @BindView(R.id.rootContainer)
-    NestedScrollView rootContainer;
+    RelativeLayout rootContainer;
+    @BindView(R.id.firstChild)
+    ScrollView firstChild;
     private MovieListPresenter movieListPresenter;
-    private Scene movieDetailsScene;
-    private float offset;
+    public static Scene movieDetailsScene;
+    private int offset;
 
     private NavigationListener navigationListener;
+    private String currentTransitionName;
+    private MovieListRecyclerAdapter movieListRecyclerAdapter;
 
 
     @Nullable
@@ -138,14 +143,16 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
 
     @Override
     public void onItemClick(RecyclerView recyclerView, View itemClicked, String transitionName, int position, Movie movie) {
-        offset=rootContainer.getScaleY();
+        currentTransitionName=transitionName;
+        offset=firstChild.getScrollY();
         selectedRecyclerView = recyclerView;
         movieDetailsScene= MovieDetailsLayout.showScene(getActivity(), rootContainer, itemClicked, transitionName, movie.getId());
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, List<Movie> movieList) {
 
-        MovieListRecyclerAdapter movieListRecyclerAdapter = new MovieListRecyclerAdapter(recyclerView, getContext(), movieList, this);
+
+        movieListRecyclerAdapter = new MovieListRecyclerAdapter(recyclerView, getContext(), movieList, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
@@ -169,5 +176,37 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     public void onDetach() {
         navigationListener = null;
         super.onDetach();
+    }
+
+    public void onBackPressedWithScene() {
+        int childPosition = TransitionUtils.getItemPositionFromTransition(currentTransitionName);
+        MovieDetailsLayout.hideScene(getActivity(),rootContainer,getSharedViewByPosition(childPosition),currentTransitionName);
+        notifyLayoutAfterBackPress(childPosition);
+        movieDetailsScene = null;
+
+    }
+
+    private void notifyLayoutAfterBackPress(int childPosition) {
+        rootContainer.removeAllViews();
+        rootContainer.addView(firstChild);
+        selectedRecyclerView.requestLayout();
+
+        firstChild.post(new Runnable() {
+            @Override
+            public void run() {
+                firstChild.scrollTo(0, offset);
+            }
+        });
+        movieListRecyclerAdapter.notifyItemChanged(childPosition);
+
+    }
+
+    private View getSharedViewByPosition(int childPosition) {
+        for (int i = 0; i < selectedRecyclerView.getChildCount(); i++) {
+            if (childPosition == selectedRecyclerView.getChildAdapterPosition(selectedRecyclerView.getChildAt(i))) {
+                return selectedRecyclerView.getChildAt(i);
+            }
+        }
+        return null;
     }
 }

@@ -1,317 +1,291 @@
 package com.alokomkar.rxmoviedb.moviedetails.model;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
+
+import java.util.List;
 
 /**
  * Created by rahul on 15/06/17.
  */
 
+@JsonObject
+public class MovieDetailsResponse {
 
-public class MovieDetailsResponse
-{
-    private String budget;
+    @JsonField(name = "adult")
 
-    private String vote_average;
+    private Boolean adult;
+    @JsonField(name = "backdrop_path")
 
-    private String backdrop_path;
+    private String backdropPath;
+    @JsonField(name = "belongs_to_collection")
 
-    private Genres[] genres;
+    private BelongsToCollection belongsToCollection;
+    @JsonField(name = "budget")
 
-    private String status;
+    private Integer budget;
+    @JsonField(name = "genres")
 
-    private String runtime;
-
-    private Spoken_languages[] spoken_languages;
-
-    private String adult;
+    private List<Genre> genres = null;
+    @JsonField(name = "homepage")
 
     private String homepage;
+    @JsonField(name = "id")
 
-    private String id;
+    private Integer id;
+    @JsonField(name = "imdb_id")
 
-    private Production_countries[] production_countries;
+    private String imdbId;
+    @JsonField(name = "original_language")
 
-    private String title;
+    private String originalLanguage;
+    @JsonField(name = "original_title")
 
-    private String original_language;
+    private String originalTitle;
+    @JsonField(name = "overview")
 
     private String overview;
+    @JsonField(name = "popularity")
 
-    private Production_companies[] production_companies;
+    private Double popularity;
+    @JsonField(name = "poster_path")
 
-    private Belongs_to_collection belongs_to_collection;
+    private String posterPath;
+    @JsonField(name = "production_companies")
 
-    private String imdb_id;
+    private List<ProductionCompany> productionCompanies = null;
+    @JsonField(name = "production_countries")
 
-    private String release_date;
+    private List<ProductionCountry> productionCountries = null;
+    @JsonField(name = "release_date")
 
-    private String original_title;
+    private String releaseDate;
+    @JsonField(name = "revenue")
 
-    private String vote_count;
+    private Integer revenue;
+    @JsonField(name = "runtime")
 
-    private String poster_path;
+    private Integer runtime;
+    @JsonField(name = "spoken_languages")
 
-    private String video;
+    private List<SpokenLanguage> spokenLanguages = null;
+    @JsonField(name = "status")
+
+    private String status;
+    @JsonField(name = "tagline")
 
     private String tagline;
+    @JsonField(name = "title")
 
-    private String revenue;
+    private String title;
+    @JsonField(name = "video")
 
-    private String popularity;
+    private Boolean video;
+    @JsonField(name = "vote_average")
 
-    public String getBudget ()
-    {
-        return budget;
-    }
+    private Double voteAverage;
+    @JsonField(name = "vote_count")
 
-    public void setBudget (String budget)
-    {
-        this.budget = budget;
-    }
+    private Integer voteCount;
 
-    public String getVote_average ()
-    {
-        return vote_average;
-    }
-
-    public void setVote_average (String vote_average)
-    {
-        this.vote_average = vote_average;
-    }
-
-    public String getBackdrop_path ()
-    {
-        return backdrop_path;
-    }
-
-    public void setBackdrop_path (String backdrop_path)
-    {
-        this.backdrop_path = backdrop_path;
-    }
-
-    public Genres[] getGenres ()
-    {
-        return genres;
-    }
-
-    public void setGenres (Genres[] genres)
-    {
-        this.genres = genres;
-    }
-
-    public String getStatus ()
-    {
-        return status;
-    }
-
-    public void setStatus (String status)
-    {
-        this.status = status;
-    }
-
-    public String getRuntime ()
-    {
-        return runtime;
-    }
-
-    public void setRuntime (String runtime)
-    {
-        this.runtime = runtime;
-    }
-
-    public Spoken_languages[] getSpoken_languages ()
-    {
-        return spoken_languages;
-    }
-
-    public void setSpoken_languages (Spoken_languages[] spoken_languages)
-    {
-        this.spoken_languages = spoken_languages;
-    }
-
-    public String getAdult ()
-    {
+    public Boolean getAdult() {
         return adult;
     }
 
-    public void setAdult (String adult)
-    {
+    public void setAdult(Boolean adult) {
         this.adult = adult;
     }
 
-    public String getHomepage ()
-    {
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
+    }
+
+    public BelongsToCollection getBelongsToCollection() {
+        return belongsToCollection;
+    }
+
+    public void setBelongsToCollection(BelongsToCollection belongsToCollection) {
+        this.belongsToCollection = belongsToCollection;
+    }
+
+    public Integer getBudget() {
+        return budget;
+    }
+
+    public void setBudget(Integer budget) {
+        this.budget = budget;
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
+
+    public String getHomepage() {
         return homepage;
     }
 
-    public void setHomepage (String homepage)
-    {
+    public void setHomepage(String homepage) {
         this.homepage = homepage;
     }
 
-    public String getId ()
-    {
+    public Integer getId() {
         return id;
     }
 
-    public void setId (String id)
-    {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Production_countries[] getProduction_countries ()
-    {
-        return production_countries;
+    public String getImdbId() {
+        return imdbId;
     }
 
-    public void setProduction_countries (Production_countries[] production_countries)
-    {
-        this.production_countries = production_countries;
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
     }
 
-    public String getTitle ()
-    {
-        return title;
+    public String getOriginalLanguage() {
+        return originalLanguage;
     }
 
-    public void setTitle (String title)
-    {
-        this.title = title;
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
     }
 
-    public String getOriginal_language ()
-    {
-        return original_language;
+    public String getOriginalTitle() {
+        return originalTitle;
     }
 
-    public void setOriginal_language (String original_language)
-    {
-        this.original_language = original_language;
+    public void setOriginalTitle(String originalTitle) {
+        this.originalTitle = originalTitle;
     }
 
-    public String getOverview ()
-    {
+    public String getOverview() {
         return overview;
     }
 
-    public void setOverview (String overview)
-    {
+    public void setOverview(String overview) {
         this.overview = overview;
     }
 
-    public Production_companies[] getProduction_companies ()
-    {
-        return production_companies;
-    }
-
-    public void setProduction_companies (Production_companies[] production_companies)
-    {
-        this.production_companies = production_companies;
-    }
-
-    public Belongs_to_collection getBelongs_to_collection ()
-    {
-        return belongs_to_collection;
-    }
-
-    public void setBelongs_to_collection (Belongs_to_collection belongs_to_collection)
-    {
-        this.belongs_to_collection = belongs_to_collection;
-    }
-
-    public String getImdb_id ()
-    {
-        return imdb_id;
-    }
-
-    public void setImdb_id (String imdb_id)
-    {
-        this.imdb_id = imdb_id;
-    }
-
-    public String getRelease_date ()
-    {
-        return release_date;
-    }
-
-    public void setRelease_date (String release_date)
-    {
-        this.release_date = release_date;
-    }
-
-    public String getOriginal_title ()
-    {
-        return original_title;
-    }
-
-    public void setOriginal_title (String original_title)
-    {
-        this.original_title = original_title;
-    }
-
-    public String getVote_count ()
-    {
-        return vote_count;
-    }
-
-    public void setVote_count (String vote_count)
-    {
-        this.vote_count = vote_count;
-    }
-
-    public String getPoster_path ()
-    {
-        return poster_path;
-    }
-
-    public void setPoster_path (String poster_path)
-    {
-        this.poster_path = poster_path;
-    }
-
-    public String getVideo ()
-    {
-        return video;
-    }
-
-    public void setVideo (String video)
-    {
-        this.video = video;
-    }
-
-    public String getTagline ()
-    {
-        return tagline;
-    }
-
-    public void setTagline (String tagline)
-    {
-        this.tagline = tagline;
-    }
-
-    public String getRevenue ()
-    {
-        return revenue;
-    }
-
-    public void setRevenue (String revenue)
-    {
-        this.revenue = revenue;
-    }
-
-    public String getPopularity ()
-    {
+    public Double getPopularity() {
         return popularity;
     }
 
-    public void setPopularity (String popularity)
-    {
+    public void setPopularity(Double popularity) {
         this.popularity = popularity;
     }
 
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [budget = "+budget+", vote_average = "+vote_average+", backdrop_path = "+backdrop_path+", genres = "+genres+", status = "+status+", runtime = "+runtime+", spoken_languages = "+spoken_languages+", adult = "+adult+", homepage = "+homepage+", id = "+id+", production_countries = "+production_countries+", title = "+title+", original_language = "+original_language+", overview = "+overview+", production_companies = "+production_companies+", belongs_to_collection = "+belongs_to_collection+", imdb_id = "+imdb_id+", release_date = "+release_date+", original_title = "+original_title+", vote_count = "+vote_count+", poster_path = "+poster_path+", video = "+video+", tagline = "+tagline+", revenue = "+revenue+", popularity = "+popularity+"]";
+    public String getPosterPath() {
+        return posterPath;
     }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
+    public List<ProductionCompany> getProductionCompanies() {
+        return productionCompanies;
+    }
+
+    public void setProductionCompanies(List<ProductionCompany> productionCompanies) {
+        this.productionCompanies = productionCompanies;
+    }
+
+    public List<ProductionCountry> getProductionCountries() {
+        return productionCountries;
+    }
+
+    public void setProductionCountries(List<ProductionCountry> productionCountries) {
+        this.productionCountries = productionCountries;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public Integer getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(Integer revenue) {
+        this.revenue = revenue;
+    }
+
+    public Integer getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(Integer runtime) {
+        this.runtime = runtime;
+    }
+
+    public List<SpokenLanguage> getSpokenLanguages() {
+        return spokenLanguages;
+    }
+
+    public void setSpokenLanguages(List<SpokenLanguage> spokenLanguages) {
+        this.spokenLanguages = spokenLanguages;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTagline() {
+        return tagline;
+    }
+
+    public void setTagline(String tagline) {
+        this.tagline = tagline;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Boolean getVideo() {
+        return video;
+    }
+
+    public void setVideo(Boolean video) {
+        this.video = video;
+    }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(Integer voteCount) {
+        this.voteCount = voteCount;
+    }
+
 }

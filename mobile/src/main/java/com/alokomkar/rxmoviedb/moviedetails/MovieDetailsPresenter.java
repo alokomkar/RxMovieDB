@@ -1,11 +1,9 @@
 package com.alokomkar.rxmoviedb.moviedetails;
 
 import com.alokomkar.rxmoviedb.base.Constants;
-import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;

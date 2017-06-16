@@ -1,7 +1,5 @@
 package com.alokomkar.rxmoviedb.moviedetails;
 
-import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
-
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
