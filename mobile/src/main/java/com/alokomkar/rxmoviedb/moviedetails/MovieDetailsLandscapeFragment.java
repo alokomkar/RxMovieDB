@@ -8,6 +8,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
+
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,9 @@ import com.alokomkar.rxmoviedb.MovieApplication;
 import com.alokomkar.rxmoviedb.R;
 import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
 import com.alokomkar.rxmoviedb.moviedetails.model.Result;
+
 import com.alokomkar.rxmoviedb.moviedetails.model.ReviewResult;
+
 import com.alokomkar.rxmoviedb.utils.GravitySnapHelper;
 import com.alokomkar.rxmoviedb.utils.ItemOffsetDecoration;
 import com.alokomkar.rxmoviedb.youtube.FragmentDemoActivity;
@@ -39,7 +42,9 @@ import static android.view.View.VISIBLE;
  * Created by Alok on 16/06/17.
  */
 
+
 public class MovieDetailsLandscapeFragment extends Fragment implements MovieDetailsContract.View,TrailerAdapter.OnTrailerClick,View.OnClickListener {
+
 
     @BindView(R.id.title)
     TextView title;
@@ -75,6 +80,9 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
     private int movieId;
     private MovieDetailsPresenter movieDetailsPresenter;
     private TrailerAdapter mTrailerAdapter;
+
+    private String TAG = MovieDetailsLandscapeFragment.class.getSimpleName();
+
 
     public static MovieDetailsLandscapeFragment getInstance() {
         if (instance == null) {
@@ -130,19 +138,21 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
         starCastText.setText("Language: " + details.getOriginalLanguage());
         description.setText(details.getOverview());
         mRating.setText(String.format(getContext().getString(R.string.rating), String.valueOf(details.getVoteAverage())));
+
+
     }
 
     @Override
     public void setTrailers(List<Result> trailers) {
-        if(trailers.size()==0)
-        {
+
+        if (trailers.size() == 0) {
             trailerRecyclerView.setVisibility(GONE);
             trailerText.setVisibility(GONE);
-        }
-        else {
+        } else {
 
             trailerRecyclerView.setVisibility(VISIBLE);
             trailerText.setVisibility(VISIBLE);
+
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -155,11 +165,10 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
             mTrailerAdapter = new TrailerAdapter(getContext(), trailers, this);
             trailerRecyclerView.setAdapter(mTrailerAdapter);
 
+
         }
-
-
-
     }
+
 
     @Override
     public void setReviews(List<ReviewResult> reviews) {

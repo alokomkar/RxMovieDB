@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
         MovieDetailsLandscapeFragment movieDetailsLandscapeFragment = MovieDetailsLandscapeFragment.getInstance();
         movieDetailsLandscapeFragment.setMovieId(movie.getId());
-        mFragmentTransaction.replace(R.id.container, movieDetailsLandscapeFragment, MovieListFragment.class.getSimpleName());
+        mFragmentTransaction.replace(R.id.container, movieDetailsLandscapeFragment, MovieDetailsLandscapeFragment.class.getSimpleName());
         mFragmentTransaction.commit();
     }
 

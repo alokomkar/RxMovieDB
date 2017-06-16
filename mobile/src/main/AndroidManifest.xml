@@ -26,7 +26,7 @@
         <activity
             android:label="@string/youtube_player_fragment"
             android:name=".youtube.FragmentDemoActivity"
-            android:screenOrientation="nosensor"
+            android:screenOrientation="portrait"
             android:configChanges="orientation|screenSize|keyboardHidden">
         </activity>
     </application>
