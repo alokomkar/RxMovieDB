@@ -16,4 +16,5 @@
     <dimen name="text_18">18sp</dimen>
     <dimen name="item_offset">4dp</dimen>
     <dimen name="text_16">16sp</dimen>
+    <dimen name="text_22">22sp</dimen>
 </resources>

@@ -2,6 +2,7 @@ package com.alokomkar.rxmoviedb.moviedetails;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
@@ -11,26 +12,36 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.support.v7.widget.Toolbar;
 import android.transition.Scene;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alokomkar.rxmoviedb.HideDetailsTransitionSet;
+import com.alokomkar.rxmoviedb.MainActivity;
 import com.alokomkar.rxmoviedb.MovieApplication;
 import com.alokomkar.rxmoviedb.R;
 import com.alokomkar.rxmoviedb.ShowMovieDetailsTransition;
 import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
+import com.alokomkar.rxmoviedb.moviedetails.model.Result;
+import com.alokomkar.rxmoviedb.utils.GravitySnapHelper;
+import com.alokomkar.rxmoviedb.utils.ItemOffsetDecoration;
+import com.alokomkar.rxmoviedb.youtube.FragmentDemoActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +51,7 @@ import butterknife.ButterKnife;
  */
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetailsContract.View {
+public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetailsContract.View ,TrailerAdapter.OnTrailerClick{
 
     private static MovieDetailsPresenter movieDetailsPresenter;
     @BindView(R.id.headerImage)
@@ -74,8 +85,14 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
     @BindView(R.id.details_container)
     MovieDetailsLayout detailsContainer;
     private static Activity attachedActivity;
+    private static String backdropPathCopy;
+    private TrailerAdapter mTrailerAdapter;
 
-    String prefixImgUrl = "http://image.tmdb.org/t/p/" + "w342";
+    static String prefixImgUrl = "http://image.tmdb.org/t/p/" + "w342";
+    @BindView(R.id.rating)
+    TextView mRating;
+    @BindView(R.id.progressBar)
+    ProgressBar mProgressBar;
 
     public MovieDetailsLayout(final Context context) {
         this(context, null);
@@ -90,11 +107,18 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
+        Glide.with(getContext()).load(prefixImgUrl + backdropPathCopy)
+                .centerCrop()
+                .error(R.mipmap.ic_launcher)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(imageViewPlaceDetails);
         setToolbar();
+
+
     }
 
     private void setToolbar() {
-        collapsingToolbar.setContentScrimColor(ContextCompat.getColor(getContext(),android.R.color.black));
+        collapsingToolbar.setContentScrimColor(ContextCompat.getColor(getContext(), android.R.color.black));
         collapsingToolbar.setTitle("Movie Details");
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolbar);
         collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolbar);
@@ -121,8 +145,9 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
         });
     }
 
-    public static Scene showScene(Activity activity, final ViewGroup container, final View clickedPictureView, final String transitionName, int movieId) {
-        attachedActivity=activity;
+    public static Scene showScene(Activity activity, final ViewGroup container, final View clickedPictureView, final String transitionName, int movieId, String backdropPath) {
+        attachedActivity = activity;
+        backdropPathCopy = backdropPath;
         MovieDetailsLayout movieDetailsLayout = (MovieDetailsLayout) activity.getLayoutInflater().inflate(R.layout.details_layout, container, false);
         movieDetailsPresenter = new MovieDetailsPresenter(movieDetailsLayout, MovieApplication.getInstance().getNetModule().getRetrofit(), movieId);
         movieDetailsPresenter.start();
@@ -133,7 +158,7 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
     }
 
 
-    public static Scene hideScene(Activity activity,  ViewGroup container,  View sharedView, String transitionName) {
+    public static Scene hideScene(Activity activity, ViewGroup container, View sharedView, String transitionName) {
         MovieDetailsLayout detailsLayout = (MovieDetailsLayout) container.findViewById(R.id.details_container);
         TransitionSet set = new HideDetailsTransitionSet(activity, transitionName, sharedView, detailsLayout);
         Scene scene = new Scene(container, (View) detailsLayout);
@@ -149,11 +174,13 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
 
     @Override
     public void showProgress() {
+        mProgressBar.setVisibility(VISIBLE);
 
     }
 
     @Override
     public void hideProgress() {
+        mProgressBar.setVisibility(GONE);
 
     }
 
@@ -164,17 +191,57 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
 
     @Override
     public void setMovieDetails(MovieDetailsResponse details) {
-
-        Glide.with(getContext()).load(prefixImgUrl+details.getBackdropPath())
-                .centerCrop()
-                .error(R.mipmap.ic_launcher)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(imageViewPlaceDetails);
-
         title.setText(details.getOriginalTitle());
-        movieLimit.setText(details.getReleaseDate());
-        starCastText.setText(details.getOriginalLanguage());
+        movieLimit.setText("Release Date: " + details.getReleaseDate());
+        starCastText.setText("Language: " + details.getOriginalLanguage());
         description.setText(details.getOverview());
+        mRating.setText(String.format(getContext().getString(R.string.rating), String.valueOf(details.getVoteAverage())));
 
+        movieDetailsPresenter.getTrailers(details.getId());
+
+    }
+
+    @Override
+    public void setTrailers(List<Result> trailers) {
+        if(trailers.size()==0)
+        {
+            trailerRecyclerView.setVisibility(GONE);
+            trailerText.setVisibility(GONE);
+        }
+        else {
+
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            trailerRecyclerView.setLayoutManager(linearLayoutManager);
+            ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
+            trailerRecyclerView.addItemDecoration(itemDecoration);
+            SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+            trailerRecyclerView.setOnFlingListener(null);
+            snapHelper.attachToRecyclerView(trailerRecyclerView);
+            mTrailerAdapter = new TrailerAdapter(getContext(), trailers,this);
+            trailerRecyclerView.setAdapter(mTrailerAdapter);
+        }
+
+
+        imageViewPlaceDetails.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), FragmentDemoActivity.class);
+                intent.putExtra("key",trailers.get(0).getKey());
+                getContext().startActivity(intent);
+
+            }
+        });
+
+
+    }
+
+
+
+    @Override
+    public void onTrailerClick(int position, List<Result> mTrailerResults) {
+        Intent intent = new Intent(getContext(), FragmentDemoActivity.class);
+        intent.putExtra("key",mTrailerResults.get(position).getKey());
+        getContext().startActivity(intent);
     }
 }

@@ -14,6 +14,9 @@ import android.widget.TextView;
 import com.alokomkar.rxmoviedb.MovieApplication;
 import com.alokomkar.rxmoviedb.R;
 import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
+import com.alokomkar.rxmoviedb.moviedetails.model.Result;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,5 +105,10 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
         movieLimit.setText(details.getReleaseDate());
         starCastText.setText(details.getOriginalLanguage());
         description.setText(details.getOverview());
+    }
+
+    @Override
+    public void setTrailers(List<Result> trailers) {
+
     }
 }

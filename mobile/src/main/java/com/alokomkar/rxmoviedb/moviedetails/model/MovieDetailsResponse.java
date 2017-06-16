@@ -14,7 +14,6 @@ public class MovieDetailsResponse {
 
     @JsonField(name = "adult")
 
-
     private Boolean adult;
     @JsonField(name = "backdrop_path")
 
@@ -288,6 +287,5 @@ public class MovieDetailsResponse {
     public void setVoteCount(Integer voteCount) {
         this.voteCount = voteCount;
     }
-
 
 }

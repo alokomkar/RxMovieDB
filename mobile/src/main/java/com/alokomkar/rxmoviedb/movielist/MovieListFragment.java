@@ -149,7 +149,7 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
         currentTransitionName=transitionName;
         offset=firstChild.getScrollY();
         selectedRecyclerView = recyclerView;
-        movieDetailsScene= MovieDetailsLayout.showScene(getActivity(), rootContainer, itemClicked, transitionName, movie.getId());
+        movieDetailsScene= MovieDetailsLayout.showScene(getActivity(), rootContainer, itemClicked, transitionName, movie.getId(),movie.getBackdropPath());
     }
 
     private void setupRecyclerView(RecyclerView recyclerView, List<Movie> movieList) {

@@ -1,6 +1,7 @@
 package com.alokomkar.rxmoviedb.moviedetails;
 
 import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
+import com.alokomkar.rxmoviedb.moviedetails.model.VideoResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -15,5 +16,8 @@ public interface MovieDetailsAPI {
 
      @GET("movie/{id}")
      Observable<MovieDetailsResponse> getMovieDetails(@Path("id") int movieid, @Query("api_key") String apikEY );
+
+     @GET("movie/{id}/videos")
+     Observable<VideoResponse> getTrailers(@Path("id") int movieid, @Query("api_key") String apikEY );
 
 }

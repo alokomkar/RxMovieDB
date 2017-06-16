@@ -34,12 +34,16 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 public class FragmentDemoActivity extends YouTubeFailureRecoveryActivity {
 
   private String video;
+  private String key;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.fragments_demo);
+
+    Bundle bundle=getIntent().getExtras();
+    key=bundle.getString("key");
     //video = getIntent().getExtras().getString(Constants.TRAILER_ID);
 
     YouTubePlayerFragment youTubePlayerFragment =
@@ -52,7 +56,10 @@ public class FragmentDemoActivity extends YouTubeFailureRecoveryActivity {
                                       boolean wasRestored) {
     if (!wasRestored) {
       player.setFullscreen(true);
+      if(key==null)
       player.cueVideo("nCgQDjiotG0");
+      else
+        player.cueVideo(key);
     }
   }
 
