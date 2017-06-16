@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
         }
         else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             loadMovieListFragment();
         }
 
