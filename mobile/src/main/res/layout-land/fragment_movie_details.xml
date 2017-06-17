@@ -12,6 +12,8 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
+
+
     <RelativeLayout
         android:id="@+id/rootCardView"
         android:layout_width="match_parent"
@@ -19,6 +21,14 @@
         android:layout_marginTop="@dimen/default_layout_margin"
         android:layout_height="match_parent"
         >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:layout_centerInParent="true"
+            android:id="@+id/progressBar"
+            />
 
         <TextView
             android:id="@+id/title"
@@ -28,7 +38,7 @@
             android:paddingRight="@dimen/default_layout_margin"
             tools:text="MONKEY FOREST"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/text_18"
+            android:textSize="@dimen/text_22"
             android:transitionName="titleTransition" />
 
 
@@ -46,22 +56,35 @@
 
 
         <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="7/10"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_16"
+            android:layout_marginTop="4dp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_below="@+id/movieLimit"/>
+
+
+        <TextView
             android:id="@+id/starCastText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/movieLimit"
+            android:layout_below="@+id/rating"
             android:paddingLeft="@dimen/default_layout_margin"
             android:textStyle="normal"
             android:paddingTop="@dimen/default_layout_margin_halved"
             android:textSize="@dimen/text_16"
             android:textColor="@android:color/white"
-            android:text="Language : "/>
+            tools:text="Language : "/>
 
         <TextView
             android:id="@+id/starCast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/movieLimit"
+            android:layout_below="@+id/rating"
             android:paddingLeft="@dimen/default_layout_margin_halved"
             android:paddingRight="@dimen/default_layout_margin"
             android:paddingTop="8dp"
@@ -73,10 +96,23 @@
 
 
         <TextView
+            android:id="@+id/summaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Summary"
+            android:textSize="18sp"
+            android:layout_below="@+id/starCast"
+            android:textColor="@android:color/white"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"/>
+
+
+        <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/starCast"
+            android:layout_below="@id/summaryText"
             android:textSize="@dimen/text_16"
             android:padding="@dimen/default_layout_margin"
             tools:text="Nice movie. Go and watch . If you dont watch its your loss. People rated it 5 star. thats not our problem."
@@ -91,7 +127,7 @@
             android:layout_marginLeft="@dimen/default_layout_margin"
             android:layout_below="@+id/description"
             android:textSize="22sp"
-            android:visibility="gone"
+
             android:textColor="@android:color/white"
             android:textStyle="bold"
             android:text="Trailers"/>
@@ -101,11 +137,36 @@
             android:id="@+id/trailerRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_marginTop="@dimen/default_layout_margin"
             android:layout_marginBottom="@dimen/default_layout_margin"
             android:layout_marginLeft="@dimen/default_layout_margin_halved"
             android:layout_marginRight="@dimen/default_layout_margin_halved"
             android:layout_below="@id/trailerText"></android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/reviews_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/trailerRecyclerView"
+            android:text="Reviews"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/white"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            />
+
+        <LinearLayout
+            android:id="@+id/reviews"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/reviews_label"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:orientation="vertical"
+            />
+
 
     </RelativeLayout>
 

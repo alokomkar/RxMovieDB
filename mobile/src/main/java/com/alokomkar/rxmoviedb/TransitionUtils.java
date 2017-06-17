@@ -8,6 +8,6 @@ public class TransitionUtils {
     }
 
     public static String getRecyclerViewTransitionName(final int position) {
-        return DEFAULT_TRANSITION_NAME + position;
+        return DEFAULT_TRANSITION_NAME +position;
     }
 }

@@ -43,6 +43,7 @@ public class FragmentDemoActivity extends YouTubeFailureRecoveryActivity {
     setContentView(R.layout.fragments_demo);
 
     Bundle bundle=getIntent().getExtras();
+    if(bundle!=null)
     key=bundle.getString("key");
     //video = getIntent().getExtras().getString(Constants.TRAILER_ID);
 

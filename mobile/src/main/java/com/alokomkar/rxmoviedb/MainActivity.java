@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             return;
         }
         Intent intent = new Intent(MainActivity.this, FragmentDemoActivity.class);
+        intent.putExtra("key", currentTrailerId);
         startActivity(intent);
     }
 

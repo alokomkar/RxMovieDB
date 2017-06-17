@@ -21,9 +21,11 @@ import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ import com.alokomkar.rxmoviedb.R;
 import com.alokomkar.rxmoviedb.ShowMovieDetailsTransition;
 import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
 import com.alokomkar.rxmoviedb.moviedetails.model.Result;
+import com.alokomkar.rxmoviedb.moviedetails.model.ReviewResult;
 import com.alokomkar.rxmoviedb.utils.GravitySnapHelper;
 import com.alokomkar.rxmoviedb.utils.ItemOffsetDecoration;
 import com.alokomkar.rxmoviedb.youtube.FragmentDemoActivity;
@@ -51,7 +54,7 @@ import butterknife.ButterKnife;
  */
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetailsContract.View ,TrailerAdapter.OnTrailerClick{
+public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetailsContract.View ,TrailerAdapter.OnTrailerClick,View.OnClickListener{
 
     private static MovieDetailsPresenter movieDetailsPresenter;
     @BindView(R.id.headerImage)
@@ -84,11 +87,17 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
     CoordinatorLayout mainContent;
     @BindView(R.id.details_container)
     MovieDetailsLayout detailsContainer;
+
+    @BindView(R.id.reviews_label)
+    TextView reviews;
+    @BindView(R.id.reviews)
+    LinearLayout reviewsContainer;
+
     private static Activity attachedActivity;
     private static String backdropPathCopy;
     private TrailerAdapter mTrailerAdapter;
 
-    static String prefixImgUrl = "http://image.tmdb.org/t/p/" + "w342";
+    static String prefixImgUrl = "http://image.tmdb.org/t/p/" + "original";
     @BindView(R.id.rating)
     TextView mRating;
     @BindView(R.id.progressBar)
@@ -196,9 +205,6 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
         starCastText.setText("Language: " + details.getOriginalLanguage());
         description.setText(details.getOverview());
         mRating.setText(String.format(getContext().getString(R.string.rating), String.valueOf(details.getVoteAverage())));
-
-        movieDetailsPresenter.getTrailers(details.getId());
-
     }
 
     @Override
@@ -210,6 +216,9 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
         }
         else {
 
+            trailerRecyclerView.setVisibility(VISIBLE);
+            trailerText.setVisibility(VISIBLE);
+
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             trailerRecyclerView.setLayoutManager(linearLayoutManager);
@@ -218,24 +227,51 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
             SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
             trailerRecyclerView.setOnFlingListener(null);
             snapHelper.attachToRecyclerView(trailerRecyclerView);
-            mTrailerAdapter = new TrailerAdapter(getContext(), trailers,this);
+            mTrailerAdapter = new TrailerAdapter(getContext(), trailers, this);
             trailerRecyclerView.setAdapter(mTrailerAdapter);
+
+
+            imageViewPlaceDetails.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), FragmentDemoActivity.class);
+                    intent.putExtra("key", trailers.get(0).getKey());
+                    getContext().startActivity(intent);
+
+                }
+            });
         }
-
-
-        imageViewPlaceDetails.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), FragmentDemoActivity.class);
-                intent.putExtra("key",trailers.get(0).getKey());
-                getContext().startActivity(intent);
-
-            }
-        });
 
 
     }
 
+    @Override
+    public void setReviews(List<ReviewResult> reviews) {
+
+        if (reviews.size()==0)
+        {
+            this.reviews.setVisibility(View.GONE);
+            reviewsContainer.setVisibility(View.GONE);
+        } else
+        {
+            this.reviews.setVisibility(View.VISIBLE);
+            reviewsContainer.setVisibility(View.VISIBLE);
+
+            reviewsContainer.removeAllViews();
+            LayoutInflater inflater = attachedActivity.getLayoutInflater();
+            for (ReviewResult review : reviews)
+            {
+                ViewGroup reviewContainer = (ViewGroup) inflater.inflate(R.layout.review, reviewsContainer, false);
+                TextView reviewAuthor = ButterKnife.findById(reviewContainer, R.id.review_author);
+                TextView reviewContent = ButterKnife.findById(reviewContainer, R.id.review_content);
+                reviewAuthor.setText(review.getAuthor());
+                reviewContent.setText(review.getContent());
+                reviewContent.setOnClickListener(this);
+                reviewsContainer.addView(reviewContainer);
+            }
+        }
+
+    }
 
 
     @Override
@@ -243,5 +279,26 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
         Intent intent = new Intent(getContext(), FragmentDemoActivity.class);
         intent.putExtra("key",mTrailerResults.get(position).getKey());
         getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.review_content:
+                onReviewClick((TextView) v);
+                break;
+        }
+    }
+
+    private void onReviewClick(TextView view)
+    {
+        if (view.getMaxLines() == 5)
+        {
+            view.setMaxLines(500);
+        } else
+        {
+            view.setMaxLines(5);
+        }
     }
 }
