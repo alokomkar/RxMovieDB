@@ -102,7 +102,7 @@ public class MovieListRecyclerAdapter extends RecyclerView.Adapter<MovieListRecy
                 itemClickListener.onItemClick(
                         recyclerView,
                         view,
-                        TransitionUtils.getRecyclerViewTransitionName(position),
+                        TransitionUtils.getRecyclerViewTransitionName(position,recyclerView.getId()),
                         position,
                         movieList.get(position));
             }

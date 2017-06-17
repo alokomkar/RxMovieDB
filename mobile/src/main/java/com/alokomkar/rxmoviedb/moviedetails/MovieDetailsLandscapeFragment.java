@@ -143,8 +143,6 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
         starCastText.setText("Language: " + details.getOriginalLanguage());
         description.setText(details.getOverview());
         mRating.setText(String.format(getContext().getString(R.string.rating), String.valueOf(details.getVoteAverage())));
-
-
     }
 
     @Override

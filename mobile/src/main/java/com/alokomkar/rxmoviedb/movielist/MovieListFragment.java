@@ -181,7 +181,7 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     }
 
     public void onBackPressedWithScene() {
-        int childPosition = TransitionUtils.getItemPositionFromTransition(currentTransitionName);
+        int childPosition = TransitionUtils.getItemPositionFromTransition(currentTransitionName,selectedRecyclerView.getId());
         MovieDetailsLayout.hideScene(getActivity(),rootContainer,getSharedViewByPosition(childPosition),currentTransitionName);
         notifyLayoutAfterBackPress(childPosition);
         movieDetailsScene = null;
