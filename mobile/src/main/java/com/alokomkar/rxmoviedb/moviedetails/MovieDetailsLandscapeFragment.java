@@ -1,5 +1,6 @@
 package com.alokomkar.rxmoviedb.moviedetails;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alokomkar.rxmoviedb.MovieApplication;
+import com.alokomkar.rxmoviedb.NavigationListener;
 import com.alokomkar.rxmoviedb.R;
 import com.alokomkar.rxmoviedb.moviedetails.model.MovieDetailsResponse;
 import com.alokomkar.rxmoviedb.moviedetails.model.Result;
@@ -61,6 +63,7 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
     private MovieDetailsPresenter movieDetailsPresenter;
     private TrailerAdapter mTrailerAdapter;
     private String TAG = MovieDetailsLandscapeFragment.class.getSimpleName();
+    private NavigationListener navigationListener;
 
     public static MovieDetailsLandscapeFragment getInstance() {
         if( instance == null ) {
@@ -125,6 +128,7 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
             trailerText.setVisibility(View.GONE);
         }
         else {
+
             Log.d(TAG, "Trailers : " + trailers.size());
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -136,6 +140,11 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
             snapHelper.attachToRecyclerView(trailerRecyclerView);
             mTrailerAdapter = new TrailerAdapter(getContext(), trailers, this);
             trailerRecyclerView.setAdapter(mTrailerAdapter);
+
+            if( navigationListener != null ) {
+                navigationListener.setCurrentTrailerId(trailers.get(0).getKey());
+            }
+
         }
     }
 
@@ -144,5 +153,19 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
         Intent intent = new Intent(getContext(), FragmentDemoActivity.class);
         intent.putExtra("key",mTrailerResults.get(position).getKey());
         getContext().startActivity(intent);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if( context instanceof NavigationListener ) {
+            navigationListener = (NavigationListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        navigationListener = null;
+        super.onDetach();
     }
 }

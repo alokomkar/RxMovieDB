@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     private FrameLayout progressLayout;
     private MovieListPresenter movieListPresenter;
     private List<Movie> viewPagerMovies;
+    private String currentTrailerId = null;
 
     @Override
     public void onBackPressed() {
@@ -115,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     };
 
     private void loadMovieDetailsFragment(Movie movie) {
+        currentTrailerId = null;
         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
         MovieDetailsLandscapeFragment movieDetailsLandscapeFragment = MovieDetailsLandscapeFragment.getInstance();
         movieDetailsLandscapeFragment.setMovieId(movie.getId());
@@ -161,8 +163,17 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void playVideo(Movie movie) {
+        if( currentTrailerId == null ) {
+            Snackbar.make(findViewById(android.R.id.content), "Trailer not ready", Snackbar.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent(MainActivity.this, FragmentDemoActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void setCurrentTrailerId(String currentTrailerId) {
+        this.currentTrailerId = currentTrailerId;
     }
 
     @Override
