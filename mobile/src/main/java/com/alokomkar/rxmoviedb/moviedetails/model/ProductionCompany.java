@@ -1,10 +1,13 @@
 package com.alokomkar.rxmoviedb.moviedetails.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 @JsonObject
-public class ProductionCompany {
+public class ProductionCompany implements Parcelable {
 
     @JsonField(name="name")
     
@@ -29,4 +32,35 @@ public class ProductionCompany {
         this.id = id;
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeValue(this.id);
+    }
+
+    public ProductionCompany() {
+    }
+
+    protected ProductionCompany(Parcel in) {
+        this.name = in.readString();
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<ProductionCompany> CREATOR = new Parcelable.Creator<ProductionCompany>() {
+        @Override
+        public ProductionCompany createFromParcel(Parcel source) {
+            return new ProductionCompany(source);
+        }
+
+        @Override
+        public ProductionCompany[] newArray(int size) {
+            return new ProductionCompany[size];
+        }
+    };
 }
