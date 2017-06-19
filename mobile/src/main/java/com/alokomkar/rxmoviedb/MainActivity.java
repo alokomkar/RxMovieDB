@@ -37,11 +37,18 @@ import com.alokomkar.rxmoviedb.youtube.FragmentDemoActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements NavigationListener, MovieListContract.View, NavigationView.OnNavigationItemSelectedListener {
 
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.nav_view)
+    NavigationView mNavView;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
     private ViewPager movieTrailerViewPager;
     private CollapsingToolbarLayout collapsingToolbar;
     private FragmentTransaction mFragmentTransaction;
@@ -56,9 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -70,23 +76,18 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
-        movieTrailerViewPager = (ViewPager)findViewById(R.id.movieTrailerViewPager);
+        movieTrailerViewPager = (ViewPager) findViewById(R.id.movieTrailerViewPager);
         mainLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
         appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavView.setNavigationItemSelectedListener(this);
 
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setContentScrimColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
@@ -97,11 +98,10 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> collapseToolbar());
 
-        if( savedInstanceState == null ) {
+        if (savedInstanceState == null) {
             movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
             movieListPresenter.start();
-        }
-        else {
+        } else {
             viewPagerMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES);
             currentTrailerId = savedInstanceState.getString(Constants.TRAILER_ID, null);
             onMoviesLoaded(viewPagerMovies);
@@ -109,10 +109,10 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     }
 
-    public void collapseToolbar(){
+    public void collapseToolbar() {
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         behavior = (AppBarLayout.Behavior) params.getBehavior();
-        if(behavior!=null) {
+        if (behavior != null) {
             behavior.onNestedFling(mainLayout, appBarLayout, null, 0, 10000, true);
         }
     }
@@ -125,8 +125,8 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
         @Override
         public void onPageSelected(int position) {
-            if( viewPagerMovies != null && viewPagerMovies.size() > 0 ) {
-                loadMovieDetailsFragment( viewPagerMovies.get(position) );
+            if (viewPagerMovies != null && viewPagerMovies.size() > 0) {
+                loadMovieDetailsFragment(viewPagerMovies.get(position));
             }
         }
 
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void onMoviesLoaded(List<Movie> movies) {
-        if( movieTrailerViewPager != null && movies != null ) {
+        if (movieTrailerViewPager != null && movies != null) {
             viewPagerMovies = movies;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 Window w = getWindow(); // in Activity's onCreate() for instance
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
             movieTrailerViewPager.setPageTransformer(true, new DepthPageTransformer());
             List<TrailerFragment> trailerFragments = new ArrayList<>();
-            for( Movie movie : movies ) {
+            for (Movie movie : movies) {
                 TrailerFragment trailerFragment = new TrailerFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(Constants.MOVIE, movie);
@@ -167,9 +167,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
                 trailerFragments.add(trailerFragment);
             }
             movieTrailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), trailerFragments));
-            movieTrailerViewPager.addOnPageChangeListener( pageChangeListener );
-            if( viewPagerMovies != null && viewPagerMovies.size() > 0 ) {
-                loadMovieDetailsFragment( viewPagerMovies.get(0) );
+            movieTrailerViewPager.addOnPageChangeListener(pageChangeListener);
+            if (viewPagerMovies != null && viewPagerMovies.size() > 0) {
+                loadMovieDetailsFragment(viewPagerMovies.get(0));
             }
 
         }
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void playVideo(Movie movie) {
-        if( currentTrailerId == null ) {
+        if (currentTrailerId == null) {
             Snackbar.make(findViewById(android.R.id.content), "Trailer not ready", Snackbar.LENGTH_LONG).show();
             return;
         }
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     @Override
     public void loadNowPlayingMovies(List<Movie> movieList) {
-        onMoviesLoaded( movieList );
+        onMoviesLoaded(movieList);
     }
 
     @Override
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if( viewPagerMovies != null ) {
+        if (viewPagerMovies != null) {
             outState.putParcelableArrayList(Constants.MOVIES, new ArrayList<>(viewPagerMovies));
         }
         outState.putString(Constants.TRAILER_ID, currentTrailerId);
@@ -260,14 +260,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }
