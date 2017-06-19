@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             movieTrailerViewPager = (ViewPager)findViewById(R.id.movieTrailerViewPager);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-
             collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
             collapsingToolbar.setContentScrimColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
             collapsingToolbar.setTitle(getString(R.string.app_name));
