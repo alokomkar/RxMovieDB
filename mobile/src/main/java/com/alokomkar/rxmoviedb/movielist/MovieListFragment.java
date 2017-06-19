@@ -2,10 +2,9 @@ package com.alokomkar.rxmoviedb.movielist;
 
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -19,7 +18,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -28,12 +26,13 @@ import android.widget.TextView;
 import com.alokomkar.rxmoviedb.MovieApplication;
 import com.alokomkar.rxmoviedb.NavigationListener;
 import com.alokomkar.rxmoviedb.R;
-
 import com.alokomkar.rxmoviedb.TransitionUtils;
+import com.alokomkar.rxmoviedb.base.Constants;
 import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLayout;
 import com.alokomkar.rxmoviedb.utils.GravitySnapHelper;
 import com.alokomkar.rxmoviedb.utils.ItemOffsetDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -76,15 +75,37 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
     private NavigationListener navigationListener;
     private String currentTransitionName;
     private MovieListRecyclerAdapter movieListRecyclerAdapter;
+    private List<Movie> topRatedMovies;
+    private List<Movie> popularMovies;
+    private List<Movie> latestMovies;
+    private List<Movie> nowPlayingMovies;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_movie_list, container, false);
         unbinder = ButterKnife.bind(this, fragmentView);
-        movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
-        movieListPresenter.start();
+        if( savedInstanceState == null ) {
+            movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
+            movieListPresenter.start();
+        }
+        else {
+            topRatedMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES_TOP_RATED);
+            popularMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES_POPULAR);
+            latestMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES_LATEST);
+            nowPlayingMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES_NOW_PLAYING);
+            loadTopRatedMovies(topRatedMovies);
+            loadLatestMovies(latestMovies);
+            loadNowPlayingMovies(nowPlayingMovies);
+            loadPopularMovies(popularMovies);
+        }
         return fragmentView;
     }
 
@@ -96,12 +117,14 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
 
     @Override
     public void loadTopRatedMovies(List<Movie> movieList) {
+        topRatedMovies = movieList;
         setupRecyclerView(topMoviesRecyclerView, movieList);
     }
 
 
     @Override
     public void loadPopularMovies(List<Movie> movieList) {
+        popularMovies = movieList;
         setupRecyclerView(popularMoviesRecyclerView, movieList);
 
         for(int i=0;i<movieList.size();i++)
@@ -112,12 +135,13 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
 
     @Override
     public void loadLatestMovies(List<Movie> movieList) {
+        latestMovies = movieList;
         setupRecyclerView(latestMoviesRecyclerView, movieList);
     }
 
     @Override
     public void loadNowPlayingMovies(List<Movie> movieList) {
-
+        nowPlayingMovies = movieList;
         setupRecyclerView( nowPlayingRecyclerView, movieList );
         navigationListener.onMoviesLoaded( movieList );
 
@@ -144,6 +168,14 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
         unbinder.unbind();
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(Constants.MOVIES_LATEST, (ArrayList<? extends Parcelable>) latestMovies);
+        outState.putParcelableArrayList(Constants.MOVIES_NOW_PLAYING, (ArrayList<? extends Parcelable>) nowPlayingMovies);
+        outState.putParcelableArrayList(Constants.MOVIES_POPULAR, (ArrayList<? extends Parcelable>) popularMovies);
+        outState.putParcelableArrayList(Constants.MOVIES_TOP_RATED, (ArrayList<? extends Parcelable>) topRatedMovies);
+    }
 
     private RecyclerView selectedRecyclerView;
 
@@ -157,15 +189,18 @@ public class MovieListFragment extends Fragment implements MovieListContract.Vie
 
     private void setupRecyclerView(RecyclerView recyclerView, List<Movie> movieList) {
 
-        movieListRecyclerAdapter = new MovieListRecyclerAdapter(recyclerView, getContext(), movieList, this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
-        recyclerView.addItemDecoration(itemDecoration);
-        SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-        recyclerView.setOnFlingListener(null);
-        snapHelper.attachToRecyclerView(recyclerView);
-        recyclerView.setAdapter(movieListRecyclerAdapter);
+        if( movieList != null ) {
+            movieListRecyclerAdapter = new MovieListRecyclerAdapter(recyclerView, getContext(), movieList, this);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, LinearLayoutManager.HORIZONTAL, false);
+            recyclerView.setLayoutManager(gridLayoutManager);
+            ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
+            recyclerView.addItemDecoration(itemDecoration);
+            SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+            recyclerView.setOnFlingListener(null);
+            snapHelper.attachToRecyclerView(recyclerView);
+            recyclerView.setAdapter(movieListRecyclerAdapter);
+        }
+
 
     }
 

@@ -86,6 +86,11 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
     private String TAG = MovieDetailsLandscapeFragment.class.getSimpleName();
     private NavigationListener navigationListener;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     public static MovieDetailsLandscapeFragment getInstance() {
         if (instance == null) {

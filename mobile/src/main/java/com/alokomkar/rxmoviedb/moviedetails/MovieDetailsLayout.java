@@ -31,7 +31,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alokomkar.rxmoviedb.HideDetailsTransitionSet;
-import com.alokomkar.rxmoviedb.MainActivity;
 import com.alokomkar.rxmoviedb.MovieApplication;
 import com.alokomkar.rxmoviedb.R;
 import com.alokomkar.rxmoviedb.ShowMovieDetailsTransition;
@@ -96,12 +95,14 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
     private static Activity attachedActivity;
     private static String backdropPathCopy;
     private TrailerAdapter mTrailerAdapter;
+    private MovieDetailsResponse movieDetailsResponse;
 
     static String prefixImgUrl = "http://image.tmdb.org/t/p/" + "original";
     @BindView(R.id.rating)
     TextView mRating;
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
+    private List<Result> movieTrailers;
 
     public MovieDetailsLayout(final Context context) {
         this(context, null);
@@ -200,6 +201,7 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
 
     @Override
     public void setMovieDetails(MovieDetailsResponse details) {
+        movieDetailsResponse = details;
         title.setText(details.getOriginalTitle());
         movieLimit.setText("Release Date: " + details.getReleaseDate());
         starCastText.setText("Language: " + details.getOriginalLanguage());
@@ -216,6 +218,7 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
         }
         else {
 
+            movieTrailers = trailers;
             trailerRecyclerView.setVisibility(VISIBLE);
             trailerText.setVisibility(VISIBLE);
 

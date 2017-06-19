@@ -19,6 +19,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.alokomkar.rxmoviedb.base.Constants;
 import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLandscapeFragment;
 import com.alokomkar.rxmoviedb.movielist.Movie;
 import com.alokomkar.rxmoviedb.movielist.MovieListContract;
@@ -88,9 +89,14 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             collapsingToolbar.setTitleEnabled(true);
             fab = (FloatingActionButton) findViewById(R.id.fab);
             fab.setOnClickListener(view -> collapseToolbar());
-
-            movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
-            movieListPresenter.start();
+            if( savedInstanceState == null ) {
+                movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
+                movieListPresenter.start();
+            }
+            else {
+                viewPagerMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES);
+                currentTrailerId = savedInstanceState.getString(Constants.TRAILER_ID, null);
+            }
 
         }
         else {
@@ -227,5 +233,21 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     @Override
     public void onFailure(String msg) {
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if( viewPagerMovies != null ) {
+            outState.putParcelableArrayList(Constants.MOVIES, new ArrayList<>(viewPagerMovies));
+        }
+        outState.putString(Constants.TRAILER_ID, currentTrailerId);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        viewPagerMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES);
+        currentTrailerId = savedInstanceState.getString(Constants.TRAILER_ID, null);
     }
 }
