@@ -84,7 +84,7 @@ public class MovieDetailsLayout extends CoordinatorLayout implements MovieDetail
     @BindView(R.id.scrolling_container)
     NestedScrollView scrollingContainer;
     @BindView(R.id.main_content)
-    CoordinatorLayout mainContent;
+    public CoordinatorLayout mainContent;
     @BindView(R.id.details_container)
     MovieDetailsLayout detailsContainer;
 

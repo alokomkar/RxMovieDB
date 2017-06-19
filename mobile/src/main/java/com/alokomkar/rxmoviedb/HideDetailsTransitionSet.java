@@ -41,7 +41,7 @@ public class HideDetailsTransitionSet extends TransitionSet {
 
         if(from!=null) {
             return new TransitionBuilder(new TextResizeTransition())
-                    .link(from.findViewById(R.id.movieNameTextView), to.title, titleTransitionName())
+                    .link (to.title,from.findViewById(R.id.movieNameTextView), titleTransitionName())
                     .build();
         }
         else
@@ -52,8 +52,8 @@ public class HideDetailsTransitionSet extends TransitionSet {
     private Transition shared() {
         if(from!=null) {
             return new TransitionBuilder(TransitionInflater.from(context).inflateTransition(android.R.transition.move))
-                    .link(from.findViewById(R.id.card_view), to.imageViewPlaceDetails, transitionName)
-                    .link(from, to.rootCardView, cardViewTransitionName())
+                    .link(to.imageViewPlaceDetails, from.findViewById(R.id.rootId), transitionName)
+                    .link(to.mainContent,from,  cardViewTransitionName())
                     .build();
         }
         else
