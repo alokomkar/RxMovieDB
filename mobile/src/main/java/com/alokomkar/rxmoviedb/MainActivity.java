@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-
             collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
             collapsingToolbar.setContentScrimColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
             collapsingToolbar.setTitle(getString(R.string.app_name));

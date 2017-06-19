@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alokomkar.rxmoviedb.NavigationListener;
 import com.alokomkar.rxmoviedb.R;
@@ -28,6 +29,8 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.trailerImageView)
     ImageView trailerImageView;
     Unbinder unbinder;
+    @BindView(R.id.movieName)
+    TextView mMovieName;
     private Movie movie;
     private NavigationListener navigationListener;
 
@@ -41,15 +44,17 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
         View fragmentView = inflater.inflate(R.layout.fragment_trailer, container, false);
         unbinder = ButterKnife.bind(this, fragmentView);
         String imgUrl = "";
-        if( movie != null ) {
-            imgUrl = "http://image.tmdb.org/t/p/" + "original" + movie.getBackdropPath();
+        if (movie != null) {
+            imgUrl = "http://image.tmdb.org/t/p/" + "original" + movie.getPosterPath();
         }
         Glide.with(getContext()).load(imgUrl)
                 .thumbnail(0.5f)
                 .error(R.mipmap.ic_launcher)
                 .crossFade()
+                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(trailerImageView);
+        mMovieName.setText(movie.getOriginalTitle());
         trailerImageView.setOnClickListener(this);
         return fragmentView;
     }
@@ -68,7 +73,7 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if( context instanceof NavigationListener ) {
+        if (context instanceof NavigationListener) {
             navigationListener = (NavigationListener) context;
         }
     }
