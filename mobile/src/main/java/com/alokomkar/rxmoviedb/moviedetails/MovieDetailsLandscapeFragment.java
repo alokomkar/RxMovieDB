@@ -157,14 +157,18 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
             trailerRecyclerView.setVisibility(VISIBLE);
             trailerText.setVisibility(VISIBLE);
 
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            trailerRecyclerView.setLayoutManager(linearLayoutManager);
-            ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
-            trailerRecyclerView.addItemDecoration(itemDecoration);
-            SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-            trailerRecyclerView.setOnFlingListener(null);
-            snapHelper.attachToRecyclerView(trailerRecyclerView);
+
+            if( mTrailerAdapter == null ) {
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                trailerRecyclerView.setLayoutManager(linearLayoutManager);
+                ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getContext(), R.dimen.item_offset);
+                trailerRecyclerView.addItemDecoration(itemDecoration);
+                SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
+                trailerRecyclerView.setOnFlingListener(null);
+                snapHelper.attachToRecyclerView(trailerRecyclerView);
+            }
+
             mTrailerAdapter = new TrailerAdapter(getContext(), trailers, this);
             trailerRecyclerView.setAdapter(mTrailerAdapter);
             if( navigationListener != null ) {

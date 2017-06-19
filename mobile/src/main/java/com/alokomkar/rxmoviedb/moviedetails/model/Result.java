@@ -1,10 +1,13 @@
 package com.alokomkar.rxmoviedb.moviedetails.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 @JsonObject
-public class Result {
+public class Result implements Parcelable {
 
 @JsonField(name="id")
 
@@ -95,4 +98,47 @@ public void setType(String type) {
 this.type = type;
 }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.id);
+        dest.writeString(this.iso6391);
+        dest.writeString(this.iso31661);
+        dest.writeString(this.key);
+        dest.writeString(this.name);
+        dest.writeString(this.site);
+        dest.writeValue(this.size);
+        dest.writeString(this.type);
+    }
+
+    public Result() {
+    }
+
+    protected Result(Parcel in) {
+        this.id = in.readString();
+        this.iso6391 = in.readString();
+        this.iso31661 = in.readString();
+        this.key = in.readString();
+        this.name = in.readString();
+        this.site = in.readString();
+        this.size = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.type = in.readString();
+    }
+
+    public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
+        @Override
+        public Result createFromParcel(Parcel source) {
+            return new Result(source);
+        }
+
+        @Override
+        public Result[] newArray(int size) {
+            return new Result[size];
+        }
+    };
 }
