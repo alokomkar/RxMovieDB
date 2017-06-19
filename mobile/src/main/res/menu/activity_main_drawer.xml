@@ -2,20 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_home"
-        android:icon="@android:drawable/ic_dialog_email"
+        android:icon="@drawable/ic_theaters_white_24dp"
         android:title="@string/nav_home"/>
     <item
         android:id="@+id/nav_photos"
-        android:icon="@android:drawable/ic_dialog_email"
+        android:icon="@drawable/icons_film"
         android:title="@string/nav_photos"/>
     <item
         android:id="@+id/nav_movies"
-        android:icon="@android:drawable/ic_dialog_email"
+        android:icon="@drawable/ic_grade_white_24dp"
         android:title="@string/nav_movies"/>
 
     <item
         android:id="@+id/nav_notifications"
-        android:icon="@android:drawable/ic_dialog_email"
+        android:icon="@drawable/ic_description_white_24dp"
         android:title="@string/nav_notifications"/>
 
 </menu>

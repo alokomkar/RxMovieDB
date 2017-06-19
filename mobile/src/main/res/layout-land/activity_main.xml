@@ -73,6 +73,7 @@
             android:layout_gravity="start"
             android:background="@android:color/transparent"
             android:fitsSystemWindows="true"
+            app:itemTextColor="@android:color/white"
             app:menu="@menu/activity_main_drawer"/>
 
     </android.support.v4.widget.DrawerLayout>
