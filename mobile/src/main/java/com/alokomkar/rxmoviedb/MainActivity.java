@@ -1,7 +1,6 @@
 package com.alokomkar.rxmoviedb;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -28,7 +27,6 @@ import com.alokomkar.rxmoviedb.base.Constants;
 import com.alokomkar.rxmoviedb.moviedetails.MovieDetailsLandscapeFragment;
 import com.alokomkar.rxmoviedb.movielist.Movie;
 import com.alokomkar.rxmoviedb.movielist.MovieListContract;
-import com.alokomkar.rxmoviedb.movielist.MovieListFragment;
 import com.alokomkar.rxmoviedb.movielist.MovieListPresenter;
 import com.alokomkar.rxmoviedb.trailers.TrailerFragment;
 import com.alokomkar.rxmoviedb.trailers.TrailerViewPagerAdapter;
@@ -51,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     private ViewPager movieTrailerViewPager;
     private CollapsingToolbarLayout collapsingToolbar;
     private FragmentTransaction mFragmentTransaction;
-    private MovieListFragment movieListFragment;
     private FrameLayout progressLayout;
     private MovieListPresenter movieListPresenter;
     private List<Movie> viewPagerMovies;
@@ -63,51 +60,48 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     Toolbar toolbar;
     @Override
     public void onBackPressed() {
-        if (movieListFragment != null && movieListFragment.movieDetailsScene != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                movieListFragment.onBackPressedWithScene();
-            }
-        } else {
-            finish();
-        }
+        finish();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        //landscape mode
-        if (findViewById(R.id.movieTrailerViewPager) != null) {
-            setUpNavigationView();
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-            progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
-            movieTrailerViewPager = (ViewPager) findViewById(R.id.movieTrailerViewPager);
-            mainLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
-            appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            toolbar.bringToFront();
-            collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-            collapsingToolbar.setContentScrimColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
-            collapsingToolbar.setTitle(getString(R.string.app_name));
-            collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolbar);
-            collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolbar);
-            collapsingToolbar.setTitleEnabled(true);
-            fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(view -> collapseToolbar());
-            if( savedInstanceState == null ) {
-                movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
-                movieListPresenter.start();
-            }
-            else {
-                viewPagerMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES);
-                currentTrailerId = savedInstanceState.getString(Constants.TRAILER_ID, null);
-            }
+        setUpNavigationView();
+        progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
+        movieTrailerViewPager = (ViewPager) findViewById(R.id.movieTrailerViewPager);
+        mainLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
+        appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.bringToFront();
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setContentScrimColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimary));
+        collapsingToolbar.setTitle(getString(R.string.app_name));
+        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolbar);
+        collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolbar);
+        collapsingToolbar.setTitleEnabled(true);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(view -> collapseToolbar());
+        if( savedInstanceState == null ) {
+            movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
+            movieListPresenter.start();
+        }
+        else {
+            viewPagerMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES);
+            currentTrailerId = savedInstanceState.getString(Constants.TRAILER_ID, null);
+        }
 
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            loadMovieListFragment();
+        if( savedInstanceState == null ) {
+            movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
+            movieListPresenter.start();
+        }
+        else {
+            viewPagerMovies = savedInstanceState.getParcelableArrayList(Constants.MOVIES);
+            currentTrailerId = savedInstanceState.getString(Constants.TRAILER_ID, null);
+            onMoviesLoaded(viewPagerMovies);
         }
 
     }
@@ -214,20 +208,11 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     private void loadMovieDetailsFragment(Movie movie) {
         currentTrailerId = null;
         mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-        MovieDetailsLandscapeFragment movieDetailsLandscapeFragment = MovieDetailsLandscapeFragment.getInstance();
-        movieDetailsLandscapeFragment.setMovieId(movie.getId());
+        MovieDetailsLandscapeFragment movieDetailsLandscapeFragment = new MovieDetailsLandscapeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.MOVIE, movie);
+        movieDetailsLandscapeFragment.setArguments(bundle);
         mFragmentTransaction.replace(R.id.container, movieDetailsLandscapeFragment, MovieDetailsLandscapeFragment.class.getSimpleName());
-        mFragmentTransaction.commit();
-    }
-
-
-    private void loadMovieListFragment() {
-        mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-        movieListFragment = (MovieListFragment) getSupportFragmentManager().findFragmentByTag(MovieListFragment.class.getSimpleName());
-        if (movieListFragment == null) {
-            movieListFragment = new MovieListFragment();
-        }
-        mFragmentTransaction.replace(R.id.container, movieListFragment, MovieListFragment.class.getSimpleName());
         mFragmentTransaction.commit();
     }
 
@@ -245,7 +230,9 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             List<TrailerFragment> trailerFragments = new ArrayList<>();
             for (Movie movie : movies) {
                 TrailerFragment trailerFragment = new TrailerFragment();
-                trailerFragment.setMovie(movie);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Constants.MOVIE, movie);
+                trailerFragment.setArguments(bundle);
                 trailerFragments.add(trailerFragment);
             }
             movieTrailerViewPager.setAdapter(new TrailerViewPagerAdapter(getSupportFragmentManager(), trailerFragments));

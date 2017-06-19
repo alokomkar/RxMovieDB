@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.alokomkar.rxmoviedb.NavigationListener;
 import com.alokomkar.rxmoviedb.R;
+import com.alokomkar.rxmoviedb.base.Constants;
 import com.alokomkar.rxmoviedb.movielist.Movie;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,8 +35,12 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
     private Movie movie;
     private NavigationListener navigationListener;
 
-    public void setMovie(Movie movie) {
-        this.movie = movie;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if( savedInstanceState != null ) {
+            movie = savedInstanceState.getParcelable(Constants.MOVIE);
+        }
     }
 
     @Nullable
@@ -43,6 +48,18 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_trailer, container, false);
         unbinder = ButterKnife.bind(this, fragmentView);
+        if( savedInstanceState == null ) {
+            movie = getArguments().getParcelable(Constants.MOVIE);
+            setupViews();
+        }
+        else {
+            movie = savedInstanceState.getParcelable(Constants.MOVIE);
+            setupViews();
+        }
+        return fragmentView;
+    }
+
+    private void setupViews() {
         String imgUrl = "";
         if (movie != null) {
             imgUrl = "http://image.tmdb.org/t/p/" + "original" + movie.getPosterPath();
@@ -54,9 +71,8 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(trailerImageView);
-        mMovieName.setText(movie.getOriginalTitle());
+        //mMovieName.setText(movie.getOriginalTitle());
         trailerImageView.setOnClickListener(this);
-        return fragmentView;
     }
 
     @Override
@@ -76,6 +92,12 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
         if (context instanceof NavigationListener) {
             navigationListener = (NavigationListener) context;
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Constants.MOVIE, movie);
     }
 
     @Override
