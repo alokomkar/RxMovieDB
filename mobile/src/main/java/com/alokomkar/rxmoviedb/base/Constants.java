@@ -12,4 +12,8 @@ public interface Constants {
     String MOVIES_POPULAR = "movies_popular";
     String MOVIES_LATEST = "movies_latest";
     String MOVIES_NOW_PLAYING = "movies_now_playing";
+    String MOVIE = "movie";
+    String MOVIE_DETAILS = "movie_details";
+    String MOVIE_TRAILERS = "movie_trailers";
+    String MOVIE_REVIEWS = "movie_reviews";
 }
