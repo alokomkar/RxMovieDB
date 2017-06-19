@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
@@ -12,8 +14,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -45,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
     private MovieListPresenter movieListPresenter;
     private List<Movie> viewPagerMovies;
     private String currentTrailerId = null;
+    private FloatingActionButton fab;
+    private AppBarLayout.Behavior behavior;
+    private CoordinatorLayout mainLayout;
+    private AppBarLayout appBarLayout;
 
     @Override
     public void onBackPressed() {
@@ -72,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             progressLayout = (FrameLayout) findViewById(R.id.progressLayout);
             movieTrailerViewPager = (ViewPager)findViewById(R.id.movieTrailerViewPager);
+            mainLayout = (CoordinatorLayout) findViewById(R.id.mainLayout);
+            appBarLayout = (AppBarLayout) findViewById(R.id.app_bar);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
@@ -81,9 +87,8 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedToolbar);
             collapsingToolbar.setExpandedTitleTextAppearance(R.style.ExpandedToolbar);
             collapsingToolbar.setTitleEnabled(true);
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show());
+            fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(view -> collapseToolbar());
 
             movieListPresenter = new MovieListPresenter(this, MovieApplication.getInstance().getNetModule().getRetrofit());
             movieListPresenter.start();
@@ -94,6 +99,14 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
             loadMovieListFragment();
         }
 
+    }
+
+    public void collapseToolbar(){
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        behavior = (AppBarLayout.Behavior) params.getBehavior();
+        if(behavior!=null) {
+            behavior.onNestedFling(mainLayout, appBarLayout, null, 0, 10000, true);
+        }
     }
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
