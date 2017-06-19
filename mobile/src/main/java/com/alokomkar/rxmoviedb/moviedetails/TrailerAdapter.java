@@ -1,6 +1,7 @@
 package com.alokomkar.rxmoviedb.moviedetails;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import com.alokomkar.rxmoviedb.moviedetails.model.Result;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+
+import static android.provider.MediaStore.Images.ImageColumns.ORIENTATION;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerViewHolder> {
 

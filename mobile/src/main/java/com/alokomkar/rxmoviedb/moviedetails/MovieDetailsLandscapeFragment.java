@@ -157,7 +157,6 @@ public class MovieDetailsLandscapeFragment extends Fragment implements MovieDeta
             trailerRecyclerView.setVisibility(VISIBLE);
             trailerText.setVisibility(VISIBLE);
 
-
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             trailerRecyclerView.setLayoutManager(linearLayoutManager);
