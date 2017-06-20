@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <item
-            android:id="@+id/nav_dummy"
-            android:title="" />
+    <item
+        android:id="@+id/nav_dummy"
+        android:title=""/>
 
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/chuck_ic_search_white_24dp"
-            android:title="Trailers" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/chuck_ic_notification_white_24dp"
-            android:title="In Theaters" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/chuck_ic_notification_white_24dp"
-            android:title="Favorites" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/chuck_ic_notification_white_24dp"
-            android:title="Email" />
+    <item
+        android:id="@+id/nav_trailer"
+        android:title="Trailers"/>
+    <item
+        android:id="@+id/nav_theater"
+        android:title="In Theaters"/>
+    <item
+        android:id="@+id/nav_favorites"
+        android:title="Favorites"/>
+    <item
+        android:id="@+id/nav_message"
+        android:title="Email"/>
 
 </menu>
