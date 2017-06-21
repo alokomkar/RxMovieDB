@@ -42,4 +42,8 @@
         <item name="actionMenuTextColor">@android:color/white</item>
     </style>
 
+    <style name="RatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/selector_rating</item>
+    </style>
+
 </resources>

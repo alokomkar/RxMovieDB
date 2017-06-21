@@ -12,4 +12,5 @@ public interface NavigationListener {
     void onMoviesLoaded(List<Movie> movies);
     void playVideo(Movie movie);
     void setCurrentTrailerId(String currentTrailerId);
+    void collapseToolbar();
 }

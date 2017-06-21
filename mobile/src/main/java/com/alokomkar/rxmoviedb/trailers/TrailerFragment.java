@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.alokomkar.rxmoviedb.NavigationListener;
@@ -32,13 +34,21 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
     Unbinder unbinder;
     @BindView(R.id.movieName)
     TextView mMovieName;
+    @BindView(R.id.movieTitleTextView)
+    TextView movieTitleTextView;
+    @BindView(R.id.movieRatingBar)
+    RatingBar movieRatingBar;
+    @BindView(R.id.posterImageView)
+    ImageView posterImageView;
+    @BindView(R.id.movieTitleCardView)
+    CardView movieTitleCardView;
     private Movie movie;
     private NavigationListener navigationListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if( savedInstanceState != null ) {
+        if (savedInstanceState != null) {
             movie = savedInstanceState.getParcelable(Constants.MOVIE);
         }
     }
@@ -48,11 +58,10 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_trailer, container, false);
         unbinder = ButterKnife.bind(this, fragmentView);
-        if( savedInstanceState == null ) {
+        if (savedInstanceState == null) {
             movie = getArguments().getParcelable(Constants.MOVIE);
             setupViews();
-        }
-        else {
+        } else {
             movie = savedInstanceState.getParcelable(Constants.MOVIE);
             setupViews();
         }
@@ -62,7 +71,7 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
     private void setupViews() {
         String imgUrl = "";
         if (movie != null) {
-            imgUrl = "http://image.tmdb.org/t/p/" + "original" + movie.getPosterPath();
+            imgUrl = "http://image.tmdb.org/t/p/" + "original" + movie.getBackdropPath();
         }
         Glide.with(getContext()).load(imgUrl)
                 .thumbnail(0.5f)
@@ -73,6 +82,21 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
                 .into(trailerImageView);
         //mMovieName.setText(movie.getOriginalTitle());
         trailerImageView.setOnClickListener(this);
+        movieRatingBar.setStepSize(0.5f);
+        movieRatingBar.setRating(movie.getVoteAverage().intValue());
+        movieTitleTextView.setText(movie.getOriginalTitle());
+
+        imgUrl = "http://image.tmdb.org/t/p/" + "original" + movie.getPosterPath();
+        Glide.with(getContext()).load(imgUrl)
+                .thumbnail(0.5f)
+                .error(R.mipmap.ic_launcher)
+                .crossFade()
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(posterImageView);
+        movieTitleCardView.setOnClickListener(this);
+        posterImageView.setOnClickListener(this);
+
     }
 
     @Override
@@ -83,6 +107,10 @@ public class TrailerFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        if( view.getId() == R.id.movieTitleCardView ) {
+            navigationListener.collapseToolbar();
+            return;
+        }
         navigationListener.playVideo(movie);
     }
 

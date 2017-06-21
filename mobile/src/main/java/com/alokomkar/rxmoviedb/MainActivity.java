@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationListene
 
     }
 
+    @Override
     public void collapseToolbar() {
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         behavior = (AppBarLayout.Behavior) params.getBehavior();
